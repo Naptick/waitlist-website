@@ -83,18 +83,18 @@ const HeroTitle = styled(motion.h1)`
   margin-bottom: 24px;
   color: ${theme.colors.text};
   line-height: 1.2;
-  
+
   .gradient-text {
     background: ${theme.colors.gradientPurple};
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  
+
   .green-text {
-    color: #FF7640 !important;
+    color: #ff7640 !important;
     background: none !important;
-    -webkit-text-fill-color: #FF7640 !important;
+    -webkit-text-fill-color: #ff7640 !important;
   }
 `;
 
@@ -117,7 +117,7 @@ const ButtonGroup = styled(motion.div)`
 
 const PrimaryButton = styled(motion.button)`
   padding: 16px 32px;
-  background: #FF7640;
+  background: #ff7640;
   color: white;
   font-size: 1.1rem;
   font-weight: 600;
