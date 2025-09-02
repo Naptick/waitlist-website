@@ -11,6 +11,7 @@ const SectionContainer = styled.section`
   background: #000;
 `;
 
+// Hi testing
 const VideoBackground = styled.video`
   position: absolute;
   top: 0;
