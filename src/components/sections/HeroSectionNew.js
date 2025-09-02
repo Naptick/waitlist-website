@@ -270,8 +270,7 @@ const HeroImage = styled.div`
 
 const ProductImageContainer = styled.div`
   width: 100%;
-  max-width: 480px;
-  height: 480px;
+  height: 600px;
   position: relative;
   display: flex;
   align-items: center;
@@ -279,8 +278,7 @@ const ProductImageContainer = styled.div`
   margin-top: 40px;
 
   @media (max-width: ${theme.breakpoints.tablet}) {
-    max-width: 360px;
-    height: 360px;
+    height: 400px;
     margin-top: 20px;
   }
 `;

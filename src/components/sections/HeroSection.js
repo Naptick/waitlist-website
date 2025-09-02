@@ -160,7 +160,6 @@ const HeroImage = styled(motion.div)`
 
 const ProductImageContainer = styled(motion.div)`
   width: 100%;
-  max-width: 500px;
   height: 500px;
   position: relative;
   display: flex;
@@ -168,7 +167,6 @@ const ProductImageContainer = styled(motion.div)`
   justify-content: center;
 
   @media (max-width: ${theme.breakpoints.tablet}) {
-    max-width: 350px;
     height: 350px;
   }
 `;
