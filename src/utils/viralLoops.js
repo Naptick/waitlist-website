@@ -286,17 +286,10 @@ export const checkViralLoopsStatus = () => {
     
     const checkLoaded = () => {
       attempts++;
-      console.log(`🔍 Checking Viral Loops... Attempt ${attempts}/${maxAttempts}`);
-      console.log('Scripts in head:', Array.from(document.head.querySelectorAll('script')).map(s => s.src));
-      console.log('Window.ViralLoops:', window.ViralLoops);
-      console.log('Available window properties containing "viral":', Object.keys(window).filter(key => key.toLowerCase().includes('viral')));
       
       if (window.ViralLoops) {
-        console.log('✅ Viral Loops loaded successfully!');
-        console.log('Available methods:', Object.keys(window.ViralLoops));
         resolve(true);
       } else if (attempts >= maxAttempts) {
-        console.log('❌ Viral Loops failed to load after maximum attempts');
         resolve(false);
       } else {
         setTimeout(checkLoaded, 1000);
