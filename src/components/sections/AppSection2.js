@@ -79,24 +79,31 @@ const Description = styled(motion.p)`
 const ImageContainer = styled(motion.div)`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   position: relative;
   z-index: 2;
+  margin-right: -108px;
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    justify-content: center;
+    margin-right: 0;
+  }
 `;
 
 const ProductImage = styled(motion.img)`
-  max-width: 100%;
+  max-width: 120%;
   height: auto;
-  max-height: 600px;
+  max-height: 750px;
   object-fit: contain;
   filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
   
   @media (max-width: ${theme.breakpoints.tablet}) {
-    max-height: 400px;
+    max-width: 100%;
+    max-height: 500px;
   }
   
   @media (max-width: ${theme.breakpoints.mobile}) {
-    max-height: 300px;
+    max-height: 400px;
   }
 `;
 

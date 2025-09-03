@@ -7,6 +7,7 @@ import InsideNaphomeVideoSection from '../../components/sections/InsideNaphomeVi
 import NaptickFullVideoSection from '../../components/sections/NaptickFullVideoSection';
 import StoryCard from '../../components/sections/StoryCard';
 import AppSection1Only from '../../components/sections/AppSection1Only';
+// import ExperienceNaphome from '../../components/sections/ExperienceNaphome';
 import SectionCard from '../../components/common/SectionCard';
 import { theme } from '../../styles/theme';
 
@@ -49,6 +50,7 @@ const HomePage = () => {
       <RingFeaturesSectionGSAP />
       <InsideNaphomeVideoSection />
       <AppSection1Only />
+      {/* <ExperienceNaphome /> */}
       {/* <NaptickFullVideoSection /> */}
       {/* <StoryCard
         title="Track Your Sleep Patterns"

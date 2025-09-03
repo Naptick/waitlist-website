@@ -2,13 +2,24 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { theme } from "../../styles/theme";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const SectionContainer = styled.section`
   position: relative;
   width: 100%;
+  height: 500vh; /* Provide enough height for ScrollTrigger pinning and scrubbing */
+  background: #000;
+`;
+
+const PinnedSection = styled.div`
+  width: 100%;
   height: 100vh;
   overflow: hidden;
   background: #000;
+  position: relative;
 `;
 
 // Hi testing
@@ -70,15 +81,20 @@ const Title = styled(motion.h1)`
 
 const TextContainer = styled.div`
   position: absolute;
-  top: 60%;
+  top: 70%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
   max-width: 900px;
   width: 90%;
+  height: 100px; /* Fixed height to contain all text elements */
 `;
 
-const SequentialText = styled(motion.p)`
+const SequentialText = styled.p`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   font-size: clamp(1.2rem, 2.5vw, 1.8rem);
   color: #ffffff;
   text-align: center;
@@ -87,6 +103,7 @@ const SequentialText = styled(motion.p)`
   text-shadow: 0 2px 15px rgba(0, 0, 0, 0.9);
   font-weight: 300;
   letter-spacing: 0.5px;
+  opacity: 0; /* Initially hidden for GSAP animation */
 
   @media (max-width: ${theme.breakpoints.mobile}) {
     font-size: 1.1rem;
@@ -110,10 +127,10 @@ const OverlayGradient = styled.div`
 
 const SleepProblemsSection = () => {
   const videoRef = useRef(null);
-  const [showTitle, setShowTitle] = useState(false);
-  const [currentTextIndex, setCurrentTextIndex] = useState(-1);
   const sectionRef = useRef(null);
-  const [hasPlayed, setHasPlayed] = useState(false);
+  const pinnedRef = useRef(null);
+  const titleRef = useRef(null);
+  const textsRef = useRef([]);
 
   const texts = [
     "Stress and racing thoughts keep the mind wired.",
@@ -123,116 +140,118 @@ const SleepProblemsSection = () => {
   ];
 
   useEffect(() => {
-    const handleIntersection = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && !hasPlayed) {
-          const video = videoRef.current;
-          if (video) {
-            video.play().catch((error) => {
-              console.log("Video autoplay failed:", error);
-            });
+    const section = sectionRef.current;
+    const pinned = pinnedRef.current;
+    const title = titleRef.current;
+    const textElements = textsRef.current;
+    const video = videoRef.current;
 
-            setHasPlayed(true);
+    if (!section || !pinned || !title || !textElements.length) return;
 
-            // Timeline for animations
-            setTimeout(() => {
-              setShowTitle(true);
-            }, 500);
-
-            // Start sequential text animation after title
-            setTimeout(() => {
-              startTextSequence();
-            }, 2500);
-          }
-        }
+    // Start video immediately when component loads
+    if (video) {
+      video.play().catch((error) => {
+        console.log("Video autoplay failed:", error);
       });
-    };
-
-    const observer = new IntersectionObserver(handleIntersection, {
-      threshold: 0.5,
-    });
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
     }
 
+    // Create timeline for scroll-triggered animations
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        pin: pinned,
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 1,
+        anticipatePin: 1,
+        pinSpacing: true,
+        id: "sleep-problems-section",
+        onEnter: () => {
+          // Ensure video plays when section enters
+          if (video && video.paused) {
+            video.play().catch((error) => {
+              console.log("Video play failed:", error);
+            });
+          }
+        }
+      },
+    });
+
+    // Initially hide title and all texts
+    gsap.set(title, { opacity: 0, y: 30 });
+    gsap.set(textElements, { opacity: 0, y: 20 });
+
+    // Timeline sequence:
+    // 1. Show title first
+    tl.to(title, {
+      opacity: 1,
+      y: 0,
+      duration: 1,
+      ease: "power2.out"
+    });
+
+    // 2. Show each text line sequentially with fade in/out
+    textElements.forEach((textEl, index) => {
+      // Fade in
+      tl.to(textEl, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power2.out"
+      }, `+=${index === 0 ? 0.5 : 0.2}`) // First text has more delay after title
+      
+      // Fade out (except for the last one)
+      .to(textEl, {
+        opacity: 0,
+        y: -10,
+        duration: 0.6,
+        ease: "power2.in"
+      }, `+=${1.2}`); // Hold for 1.2 seconds before fading out
+    });
+
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      // Cleanup
+      if (tl.scrollTrigger) {
+        tl.scrollTrigger.kill();
       }
+      tl.kill();
     };
-  }, [hasPlayed, texts]);
-
-  const startTextSequence = () => {
-    let index = 0;
-
-    const showNextText = () => {
-      if (index < texts.length) {
-        setCurrentTextIndex(index);
-
-        // Show text for 3 seconds, then hide it
-        setTimeout(() => {
-          setCurrentTextIndex(-1);
-
-          // Wait 1 second before showing next text
-          setTimeout(() => {
-            index++;
-            showNextText();
-          }, 1000);
-        }, 3000);
-      } else {
-        // Restart the sequence after all texts are shown
-        setTimeout(() => {
-          index = 0;
-          showNextText();
-        }, 2000);
-      }
-    };
-
-    showNextText();
-  };
+  }, [texts]);
 
   return (
     <SectionContainer ref={sectionRef}>
-      <VideoBackground ref={videoRef} muted loop playsInline>
-        <source src="/sleep-problems.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </VideoBackground>
+      <PinnedSection ref={pinnedRef}>
+        <VideoBackground 
+          ref={videoRef} 
+          autoPlay
+          muted 
+          loop 
+          playsInline
+          preload="auto"
+        >
+          <source src="/sleep-problems.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </VideoBackground>
 
-      <OverlayGradient />
+        <OverlayGradient />
 
-      <ContentContainer>
-        <AnimatePresence>
-          {showTitle && (
-            <Title
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-            >
-              Why We Can't Sleep
-            </Title>
-          )}
-        </AnimatePresence>
-      </ContentContainer>
+        <ContentContainer>
+          <Title ref={titleRef}>
+            Why We Can't Sleep
+          </Title>
+        </ContentContainer>
 
-      <TextContainer>
-        <AnimatePresence mode="wait">
-          {currentTextIndex >= 0 && (
+        <TextContainer>
+          {texts.map((text, index) => (
             <SequentialText
-              key={currentTextIndex}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{
-                duration: 0.5,
-                ease: "easeInOut",
-              }}
+              key={index}
+              ref={(el) => (textsRef.current[index] = el)}
             >
-              {texts[currentTextIndex]}
+              {text}
             </SequentialText>
-          )}
-        </AnimatePresence>
-      </TextContainer>
+          ))}
+        </TextContainer>
+      </PinnedSection>
     </SectionContainer>
   );
 };
