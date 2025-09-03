@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import GlobalStyles from './styles/GlobalStyles';
 import VideoIntro from './components/VideoIntro/VideoIntro';
-import VideoBackground from './components/VideoBackground/VideoBackground';
+// import VideoBackground from './components/VideoBackground/VideoBackground';
 import Header from './components/layout/Header/Header';
 import HomePage from './pages/HomePage/HomePage';
 import NaptickAppPage from './pages/NaptickAppPage/NaptickAppPage';
@@ -52,7 +52,7 @@ function App() {
       )}
       
       {/* Video Background - Shows after intro */}
-      <VideoBackground isVideoEnded={!showVideo} />
+      {/* <VideoBackground isVideoEnded={!showVideo} /> */}
       
       {/* Main Content - Appears while video is ending */}
       {contentReady && (
