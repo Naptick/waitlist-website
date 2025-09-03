@@ -7,7 +7,10 @@ import productHeroImage from "../../assets/images/product-hero3.png";
 import heroBgImage from "../../assets/images/hero-bg.png";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { triggerViralLoopsPopup, checkViralLoopsStatus } from "../../utils/viralLoops";
+import {
+  triggerViralLoopsPopup,
+  checkViralLoopsStatus,
+} from "../../utils/viralLoops";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -187,7 +190,7 @@ const VideoIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   svg {
     width: 100%;
     height: 100%;
@@ -406,7 +409,7 @@ const HeroSectionNew = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <span> Reserve Your Early Bird Price Today!</span>
+              <span> Spots Are Limited — Join the Waitlist Today!</span>
             </EarlyBirdBanner>
 
             <HeroTitle
@@ -447,7 +450,7 @@ const HeroSectionNew = () => {
               }}
             >
               <ButtonRow>
-                <PrimaryButton 
+                <PrimaryButton
                   whileTap={{ scale: 0.95 }}
                   onClick={handleJoinWaitlist}
                 >
@@ -459,7 +462,7 @@ const HeroSectionNew = () => {
                 >
                   <VideoIcon>
                     <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M8 5v14l11-7z"/>
+                      <path d="M8 5v14l11-7z" />
                     </svg>
                   </VideoIcon>
                   Naphome in Action
@@ -519,7 +522,10 @@ const HeroSectionNew = () => {
                 loop
                 onClick={(e) => e.stopPropagation()}
               >
-                <source src="https://naptickvideos.s3.ap-south-1.amazonaws.com/Naptick-Full.mp4" type="video/mp4" />
+                <source
+                  src="https://naptickvideos.s3.ap-south-1.amazonaws.com/Naptick-Full.mp4"
+                  type="video/mp4"
+                />
                 Your browser does not support the video tag.
               </VideoElement>
             </VideoContainer>

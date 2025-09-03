@@ -81,7 +81,7 @@ const Title = styled(motion.h1)`
 
 const TextContainer = styled.div`
   position: absolute;
-  top: 70%;
+  top: 65%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;

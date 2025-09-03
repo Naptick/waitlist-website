@@ -22,25 +22,28 @@ const MainContent = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 60px;
   width: 100%;
-  max-width: 1400px;
-  padding: 0 20px;
+  max-width: none;
+  padding: 0;
   align-items: center;
   z-index: 2;
   margin-left: 0;
-  padding-left: 80px;
+  padding-left: 40px;
+  justify-content: flex-start;
 
   @media (max-width: ${theme.breakpoints.tablet}) {
     grid-template-columns: 1fr;
     gap: 40px;
-    padding: 0 40px;
-    text-align: center;
+    padding: 0;
+    text-align: left;
     margin-left: 0;
-    padding-left: 40px;
+    padding-left: 30px;
   }
 
   @media (max-width: ${theme.breakpoints.mobile}) {
-    padding: 0 20px;
+    padding: 0;
     padding-left: 20px;
+    margin-left: 0;
+    text-align: left;
   }
 `;
 
@@ -217,7 +220,7 @@ const AppSection = ({ showKnowMore = false }) => {
                 >
                   <img src={appStore} alt="Download on App Store" />
                 </StoreButton>
-                {showKnowMore && (
+                {/* {showKnowMore && (
                   <KnowMoreButton
                     onClick={() => navigate("/naptick-app")}
                     whileHover={{ scale: 1.05 }}
@@ -225,7 +228,7 @@ const AppSection = ({ showKnowMore = false }) => {
                   >
                     Know More...
                   </KnowMoreButton>
-                )}
+                )} */}
                 {/* <StoreButton
                   href="#"
                   whileHover={{ scale: 1.05 }}

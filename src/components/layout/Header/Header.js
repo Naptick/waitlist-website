@@ -218,12 +218,12 @@ const Header = () => {
   }, []);
 
   const navItems = [
-    { label: "Naphome", href: "#naphome" },
-    { label: "The App", href: "#the-app" },
-    { label: "Our Story", href: "#our-story" },
-    { label: "Blog", href: "/blog" },
-    { label: "Investors", href: "/investors" },
-    { label: "Contact", href: "#contact" },
+    // { label: "Naphome", href: "#naphome" },
+    // { label: "The App", href: "#the-app" },
+    // { label: "Our Story", href: "#our-story" },
+    // { label: "Blog", href: "/blog" },
+    // { label: "Investors", href: "/investors" },
+    // { label: "Contact", href: "#contact" },
   ];
 
   const scrollToSection = (href) => {

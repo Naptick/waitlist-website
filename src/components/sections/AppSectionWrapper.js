@@ -39,15 +39,15 @@ const ContentWrapper = styled.div`
   z-index: 2;
   width: 100%;
   max-width: 1400px;
-  margin: 0 auto;
-  padding: 60px;
+  margin: 0;
+  padding: 60px 20px 60px 20px;
   
   @media (max-width: ${theme.breakpoints.tablet}) {
-    padding: 40px;
+    padding: 40px 20px;
   }
   
   @media (max-width: ${theme.breakpoints.mobile}) {
-    padding: 20px;
+    padding: 20px 10px;
   }
 `;
 
