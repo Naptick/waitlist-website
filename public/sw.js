@@ -1,8 +1,9 @@
-const CACHE_NAME = 'naptick-assets-v4';
+const CACHE_NAME = 'naptick-assets-v5';
 const PUBLIC_VIDEOS = [
   '/intro-video1.mp4',
   '/sleep-problems.mp4',
-  '/inside-naphome.mp4'
+  '/inside-naphome.mp4',
+  '/naptick-full.mp4'
 ];
 
 // Install event - lightweight install, no video preloading

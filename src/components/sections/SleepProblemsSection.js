@@ -194,7 +194,7 @@ const SleepProblemsSection = () => {
   return (
     <SectionContainer ref={sectionRef}>
       <VideoBackground ref={videoRef} muted loop playsInline>
-        <source src="/sleep-problems.mp4" type="video/mp4" />
+        <source src={`${process.env.PUBLIC_URL}/sleep-problems.mp4`} type="video/mp4" />
         Your browser does not support the video tag.
       </VideoBackground>
 

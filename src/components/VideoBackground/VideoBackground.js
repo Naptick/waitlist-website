@@ -49,7 +49,7 @@ const VideoBackground = ({ isVideoEnded }) => {
       >
         <BackgroundVideo
           ref={videoRef}
-          src="/intro-video.mp4"
+          src={`${process.env.PUBLIC_URL}/intro-video1.mp4`}
           muted
           playsInline
         />
