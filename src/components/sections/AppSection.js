@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { theme } from "../../styles/theme";
 // import SectionCard from '../common/SectionCard'; // Commented out for curtain effect
 import AppSectionWrapper from "./AppSectionWrapper";
@@ -105,21 +106,44 @@ const StoreButton = styled(motion.a)`
   }
 `;
 
+const KnowMoreButton = styled(motion.button)`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  padding: 0 30px;
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+
+  &:hover {
+    transform: translateY(-3px) scale(1.05);
+    background-color: #f5f5f5;
+  }
+`;
+
 const RightSection = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   height: 400px;
-  
+
   @media (max-width: ${theme.breakpoints.tablet}) {
     display: none;
   }
 `;
 
-const AppSection = () => {
+const AppSection = ({ showKnowMore = false }) => {
   const containerRef = useRef(null);
   const sectionRef = useRef(null);
   const revealRef = useRef(null);
+  const navigate = useNavigate();
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
@@ -193,6 +217,15 @@ const AppSection = () => {
                 >
                   <img src={appStore} alt="Download on App Store" />
                 </StoreButton>
+                {showKnowMore && (
+                  <KnowMoreButton
+                    onClick={() => navigate("/naptick-app")}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Know More...
+                  </KnowMoreButton>
+                )}
                 {/* <StoreButton
                   href="#"
                   whileHover={{ scale: 1.05 }}
@@ -203,7 +236,7 @@ const AppSection = () => {
               </StoreButtons>
             </motion.div>
           </TextSection>
-          
+
           <RightSection>
             {/* Placeholder for future content like app mockup or visual elements */}
           </RightSection>

@@ -17,7 +17,7 @@ const AppSection1Only = () => {
         index={0}
         totalSections={1}
       >
-        <AppSection />
+        <AppSection showKnowMore={true} />
       </AppSectionWrapper>
     </AppSection1Container>
   );

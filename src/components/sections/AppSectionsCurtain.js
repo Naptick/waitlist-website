@@ -18,17 +18,25 @@ import appBg4 from '../../assets/images/app-section/app-bg4.png';
 import appBg5 from '../../assets/images/app-section/app-bg5.png';
 
 const CurtainContainer = styled.div`
-  position: relative; /* Fix positioning warning */
+  position: relative;
   width: 100%;
   
-  /* Ensure proper stacking order */
+  /* CURTAIN EFFECT STYLING COMMENTED OUT */
+  /*
+  overflow-x: hidden;
+  
+  > div {
+    position: relative;
+  }
+  
   > div:last-child {
     position: relative !important;
-    z-index: 1 !important; /* Lower z-index so it doesn't overshadow others */
+    z-index: 1 !important;
     transform: none !important;
     display: flex !important;
     min-height: 100vh !important;
   }
+  */
 `;
 
 const AppSectionsCurtain = () => {
@@ -40,7 +48,8 @@ const AppSectionsCurtain = () => {
     { Component: AppSection5, bg: appBg5 }
   ];
 
-  // Global cleanup on component unmount
+  // Global cleanup on component unmount - COMMENTED OUT WITH CURTAIN EFFECT
+  /*
   useEffect(() => {
     return () => {
       // Kill all ScrollTriggers when component unmounts
@@ -56,6 +65,7 @@ const AppSectionsCurtain = () => {
       }
     };
   }, []);
+  */
 
   console.log('AppSectionsCurtain rendering with', sections.length, 'sections');
 

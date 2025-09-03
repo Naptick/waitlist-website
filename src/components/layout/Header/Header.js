@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import { useNavigate, useLocation } from "react-router-dom";
 import { theme } from "../../../styles/theme";
 import logo from "../../../assets/images/brand-logo/logo1.png";
 import { triggerViralLoopsPopup } from "../../../utils/viralLoops";
@@ -204,6 +205,8 @@ const MobileNavLink = styled(motion.a)`
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -217,7 +220,6 @@ const Header = () => {
   const navItems = [
     { label: "Naphome", href: "#naphome" },
     { label: "The App", href: "#the-app" },
-    { label: "Naptick-App", href: "/naptick-app" },
     { label: "Our Story", href: "#our-story" },
     { label: "Blog", href: "/blog" },
     { label: "Investors", href: "/investors" },
@@ -226,15 +228,42 @@ const Header = () => {
 
   const scrollToSection = (href) => {
     if (href.startsWith("#")) {
-      const element = document.querySelector(href);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+      // Check if we're on a different page
+      if (location.pathname !== '/') {
+        // Navigate to home page first, then scroll to section
+        navigate('/');
+        setTimeout(() => {
+          const element = document.querySelector(href);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 100);
+      } else {
+        // Same page, just scroll
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
       }
     } else {
       // Handle route navigation
       window.location.href = href;
     }
     setMobileMenuOpen(false);
+  };
+  
+  const handleLogoClick = () => {
+    if (location.pathname === '/') {
+      // If already on home page, just scroll to top
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      // Navigate to home page
+      navigate('/');
+      // After navigation, scroll to top
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 100);
+    }
   };
 
   return (
@@ -248,7 +277,7 @@ const Header = () => {
           <Logo
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            onClick={handleLogoClick}
             style={{ order: 1, marginLeft: "0", marginRight: "auto" }}
           >
             <img src={logo} alt="Naptick Logo" />
