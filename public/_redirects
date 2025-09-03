@@ -1,0 +1,1 @@
+/^[^.]+$|\.(?!(css|gif|ico|jpg|mp4|js|png|txt|svg|woff|ttf|map|json)$)([^.]+$)/ /index.html 200

@@ -111,7 +111,7 @@ const VideoIntro = ({ onComplete, isEnding }) => {
             playsInline
             preload="auto"
             onEnded={handleVideoEnd}
-            src={`${process.env.PUBLIC_URL}/intro-video1.mp4`}
+            src="./intro-video1.mp4"
           >
             Your browser does not support the video tag.
           </Video>

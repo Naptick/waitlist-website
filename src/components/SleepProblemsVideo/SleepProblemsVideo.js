@@ -148,7 +148,7 @@ const SleepProblemsVideo = ({ onComplete }) => {
         muted
         playsInline
       >
-        <source src={`${process.env.PUBLIC_URL}/sleep-problems.mp4`} type="video/mp4" />
+        <source src="./sleep-problems.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </Video>
 
