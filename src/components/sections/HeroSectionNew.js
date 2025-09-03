@@ -394,7 +394,7 @@ const HeroSectionNew = () => {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          filter: "brightness(1.3) contrast(1.1)",
+          filter: "brightness(0.8) contrast(1.1)",
         }}
       >
         {/* Video background removed - using theme background instead */}
