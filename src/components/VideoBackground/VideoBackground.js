@@ -49,7 +49,7 @@ const VideoBackground = ({ isVideoEnded }) => {
       >
         <BackgroundVideo
           ref={videoRef}
-          src="./intro-video1.mp4"
+          src="https://naptickvideos.s3.ap-south-1.amazonaws.com/Intro-Video1.mp4"
           muted
           playsInline
         />

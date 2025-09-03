@@ -111,7 +111,7 @@ const VideoIntro = ({ onComplete, isEnding }) => {
             playsInline
             preload="auto"
             onEnded={handleVideoEnd}
-            src="./intro-video1.mp4"
+            src="https://naptickvideos.s3.ap-south-1.amazonaws.com/Intro-Video1.mp4"
           >
             Your browser does not support the video tag.
           </Video>

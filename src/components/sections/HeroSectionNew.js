@@ -519,7 +519,7 @@ const HeroSectionNew = () => {
                 loop
                 onClick={(e) => e.stopPropagation()}
               >
-                <source src="./naptick-full.mp4" type="video/mp4" />
+                <source src="https://naptickvideos.s3.ap-south-1.amazonaws.com/Naptick-Full.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </VideoElement>
             </VideoContainer>

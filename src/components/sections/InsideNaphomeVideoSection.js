@@ -163,7 +163,7 @@ const InsideNaphomeVideoSection = () => {
           onLoadedData={handleLoadedData}
           onTimeUpdate={handleTimeUpdate}
         >
-          <source src="./inside-naphome.mp4" type="video/mp4" />
+          <source src="https://naptickvideos.s3.ap-south-1.amazonaws.com/inside-naphome.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </VideoElement>
         

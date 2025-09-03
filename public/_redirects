@@ -1,1 +1,4 @@
-/^[^.]+$|\.(?!(css|gif|ico|jpg|mp4|js|png|txt|svg|woff|ttf|map|json)$)([^.]+$)/ /index.html 200
+/*    /index.html   200
+/*.mp4   /:splat   200
+/*.png   /:splat   200
+/*.jpg   /:splat   200
