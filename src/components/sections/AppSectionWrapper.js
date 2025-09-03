@@ -13,23 +13,24 @@ const SectionWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(26, 26, 26);
   position: relative;
+  background-color: rgb(26, 26, 26);
+  background-image: ${props => props.$bgImage ? `url(${props.$bgImage})` : 'none'};
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   
-  /* Background image */
-  &::before {
+  /* Overlay effect */
+  &::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url(${props => props.$bgImage});
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: 0.7;
-    z-index: -1;
+    background: rgba(26, 26, 26, 0.3);
+    pointer-events: none;
+    z-index: 1;
   }
 `;
 
@@ -57,6 +58,8 @@ const AppSectionWrapper = React.memo(({ children, bgImage, index, totalSections 
   const hasInitialized = useRef(false);
 
   const setupScrollTrigger = useCallback(() => {
+    // CURTAIN EFFECT COMMENTED OUT - Normal scrolling behavior
+    /*
     const section = sectionRef.current;
     
     if (!section || hasInitialized.current) return;
@@ -78,24 +81,31 @@ const AppSectionWrapper = React.memo(({ children, bgImage, index, totalSections 
 
     console.log(`🎬 Setting up curtain for AppSection${index + 1}`);
 
-    // Simple, stable curtain effect
+    // Enhanced curtain effect with better control
     const trigger = ScrollTrigger.create({
       trigger: section,
       start: "top top",
-      end: "+=100vh",
+      end: "bottom top",
       pin: true,
       pinSpacing: false,
-      scrub: 1,
-      anticipatePin: 1,
+      scrub: true,
       id: `app-section-${index + 1}`,
+      onUpdate: (self) => {
+        // Fade out effect as the next section comes up
+        gsap.set(section, {
+          opacity: 1 - (self.progress * 0.3) // Slight fade as it gets covered
+        });
+      }
     });
 
     triggerRef.current = trigger;
     hasInitialized.current = true;
-    
+    */
   }, [index, isLast]);
 
   useEffect(() => {
+    // CURTAIN EFFECT COMMENTED OUT
+    /*
     // Delay initialization to prevent race conditions
     const timer = setTimeout(setupScrollTrigger, 100);
     
@@ -112,13 +122,14 @@ const AppSectionWrapper = React.memo(({ children, bgImage, index, totalSections 
         }
       }
     };
+    */
   }, []); // Empty dependency array to prevent re-runs
 
   return (
     <SectionWrapper 
       ref={sectionRef} 
       $bgImage={bgImage}
-      style={{ zIndex: totalSections - index }}
+      // style={{ zIndex: totalSections - index }} // CURTAIN EFFECT COMMENTED OUT
     >
       <ContentWrapper>
         {children}

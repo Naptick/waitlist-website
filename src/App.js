@@ -7,6 +7,7 @@ import Header from './components/layout/Header/Header';
 import HomePage from './pages/HomePage/HomePage';
 import NaptickAppPage from './pages/NaptickAppPage/NaptickAppPage';
 import SmoothScroll from './components/common/SmoothScroll';
+import ScrollToTop from './components/common/ScrollToTop';
 
 function App() {
   const [showVideo, setShowVideo] = useState(true);
@@ -40,6 +41,7 @@ function App() {
   return (
     <Router>
       <GlobalStyles />
+      <ScrollToTop />
       
       {/* Video Intro - Overlaps with content */}
       {showVideo && (
