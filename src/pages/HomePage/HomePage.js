@@ -4,18 +4,7 @@ import HeroSectionNew from '../../components/sections/HeroSectionNew';
 import SleepProblemsSection from '../../components/sections/SleepProblemsSection';
 import RingFeaturesSectionGSAP from '../../components/sections/RingFeaturesSectionGSAP';
 import InsideNaphomeVideoSection from '../../components/sections/InsideNaphomeVideoSection';
-import NaptickFullVideoSection from '../../components/sections/NaptickFullVideoSection';
-import StoryCard from '../../components/sections/StoryCard';
 import AppSection1Only from '../../components/sections/AppSection1Only';
-// import ExperienceNaphome from '../../components/sections/ExperienceNaphome';
-import SectionCard from '../../components/common/SectionCard';
-import { theme } from '../../styles/theme';
-
-// Import story images
-import story1 from '../../assets/images/storytelling/story-1.jpg';
-import story2 from '../../assets/images/storytelling/story-2.jpg';
-import story3 from '../../assets/images/storytelling/story-3.jpg';
-import story4 from '../../assets/images/storytelling/story-4.jpg';
 
 const HomeContainer = styled.main`
   width: 100%;
@@ -24,23 +13,6 @@ const HomeContainer = styled.main`
   position: relative;
 `;
 
-const SectionTitle = styled.h2`
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 20px;
-  background: ${theme.colors.gradientPurple};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-`;
-
-const SectionContent = styled.div`
-  text-align: center;
-  color: ${theme.colors.textSecondary};
-  font-size: 1.2rem;
-  line-height: 1.6;
-`;
 
 const HomePage = () => {
   return (

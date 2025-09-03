@@ -38,6 +38,12 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event - serve from cache when available
 self.addEventListener('fetch', (event) => {
+  // Skip ALL caching in development mode
+  if (event.request.url.includes('localhost')) {
+    console.log('🚫 Development mode - no caching:', event.request.url);
+    return;
+  }
+  
   // Only handle GET requests
   if (event.request.method !== 'GET') {
     return;
