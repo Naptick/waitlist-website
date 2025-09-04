@@ -11,6 +11,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 // Import app images
 // import appBg from "../../assets/images/app-section/app-bg1.png";
 import appStore from "../../assets/images/app-section/app-store1.png";
+import appProduct from "../../assets/images/app-section/app-product.png";
 // import googlePlay from "../../assets/images/app-section/google-play.png";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -40,10 +41,14 @@ const MainContent = styled.div`
   }
 
   @media (max-width: ${theme.breakpoints.mobile}) {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
     padding: 0;
     padding-left: 20px;
     margin-left: 0;
     text-align: left;
+    align-items: flex-start;
   }
 `;
 
@@ -91,6 +96,17 @@ const StoreButtons = styled(motion.div)`
   gap: 20px;
   justify-content: flex-start;
   flex-wrap: wrap;
+  align-items: center;
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    gap: 16px;
+  }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    gap: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const StoreButton = styled(motion.a)`
@@ -102,6 +118,14 @@ const StoreButton = styled(motion.a)`
     height: 60px;
     width: auto;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    
+    @media (max-width: ${theme.breakpoints.tablet}) {
+      height: 55px;
+    }
+    
+    @media (max-width: ${theme.breakpoints.mobile}) {
+      height: 50px;
+    }
   }
 
   &:hover {
@@ -135,10 +159,40 @@ const RightSection = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 400px;
+  min-height: 500px;
+  position: relative;
+  overflow: visible;
 
   @media (max-width: ${theme.breakpoints.tablet}) {
-    display: none;
+    min-height: 400px;
+    justify-content: center;
+  }
+
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    min-height: 300px;
+    width: 100%;
+    justify-content: flex-start;
+    padding-left: 0;
+    margin-left: 0;
+  }
+`;
+
+const ProductImage = styled(motion.img)`
+  width: 120%;
+  height: auto;
+  max-height: 550px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    width: 100%;
+    max-height: 400px;
+  }
+
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    width: 80%;
+    max-height: 300px;
+    margin-left: -40px;
   }
 `;
 
@@ -241,7 +295,18 @@ const AppSection = ({ showKnowMore = false }) => {
           </TextSection>
 
           <RightSection>
-            {/* Placeholder for future content like app mockup or visual elements */}
+            <ProductImage
+              src={appProduct}
+              alt="Naptick App Product"
+              initial={{ x: 100, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              viewport={{ once: false, amount: 0.3 }}
+              transition={{
+                duration: 0.8,
+                delay: 0.3,
+                ease: [0.65, 0, 0.35, 1],
+              }}
+            />
           </RightSection>
         </MainContent>
         {/* </SectionCard> Commented out for curtain effect */}
