@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { theme } from '../../styles/theme';
 import HeroSectionNew from '../../components/sections/HeroSectionNew';
 import SleepProblemsSection from '../../components/sections/SleepProblemsSection';
 import RingFeaturesSectionGSAP from '../../components/sections/RingFeaturesSectionGSAP';
@@ -11,6 +12,10 @@ const HomeContainer = styled.main`
   overflow-x: hidden;
   padding: 0 20px;
   position: relative;
+
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    padding: 0;
+  }
 `;
 
 

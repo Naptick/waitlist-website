@@ -20,6 +20,10 @@ const PinnedSection = styled.div`
   overflow: hidden;
   background: #000;
   position: relative;
+
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    overflow: visible;
+  }
 `;
 
 // Hi testing
@@ -32,6 +36,14 @@ const VideoBackground = styled.video`
   object-fit: cover;
   opacity: 0.9; /* 70% transparency as requested */
   transform: rotate(180deg);
+
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    object-fit: cover;
+    width: 120%;
+    height: 120%;
+    left: -10%;
+    top: -10%;
+  }
 `;
 
 const ContentContainer = styled.div`

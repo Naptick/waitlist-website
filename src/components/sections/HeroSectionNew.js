@@ -54,7 +54,7 @@ const HeroCard = styled.div`
   }
   
   @media (max-width: ${theme.breakpoints.mobile}) {
-    padding: 40px 20px;
+    padding: 40px 20px 20px 20px;
     border-radius: 16px;
   }
 `;
@@ -256,6 +256,7 @@ const EarlyAccessText = styled(motion.p)`
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
   margin-top: 12px;
+  margin-left: 8px;
   text-align: left;
   font-weight: 500;
 `;

@@ -187,12 +187,13 @@ const ProductImage = styled(motion.img)`
   @media (max-width: ${theme.breakpoints.tablet}) {
     width: 100%;
     max-height: 400px;
+    margin-left: 0;
   }
 
   @media (max-width: ${theme.breakpoints.mobile}) {
     width: 80%;
     max-height: 300px;
-    margin-left: -40px;
+    margin-left: 0;
   }
 `;
 

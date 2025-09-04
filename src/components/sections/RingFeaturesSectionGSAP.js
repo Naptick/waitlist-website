@@ -108,31 +108,31 @@ const Subtitle = styled(motion.p)`
 const CardsSection = styled.div`
   position: relative;
   width: 100%;
-  height: 400px;
+  height: 500px;
   display: flex;
   align-items: center;
   justify-content: center;
   
   @media (max-width: ${theme.breakpoints.tablet}) {
-    height: 300px;
+    height: 380px;
   }
   
   @media (max-width: 430px) {
-    height: 250px;
+    height: 280px;
     width: 100%;
     margin: 0;
     justify-content: flex-start;
     padding-left: 20px;
     overflow: hidden;
     align-items: flex-start;
-    padding-top: 20px;
+    padding-top: 0;
   }
 `;
 
 const CardContainer = styled.div`
   position: relative;
   width: 900px;
-  height: 450px;
+  height: 550px;
   display: flex;
   align-items: center;
   overflow: visible;
@@ -140,12 +140,12 @@ const CardContainer = styled.div`
   
   @media (max-width: ${theme.breakpoints.tablet}) {
     width: 600px;
-    height: 350px;
+    height: 420px;
   }
   
   @media (max-width: 430px) {
     width: 100%;
-    height: 250px;
+    height: 280px;
     margin: 0;
     position: relative;
     padding-left: 0;
@@ -157,7 +157,7 @@ const CardWrapper = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 450px;
+  height: 550px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -165,11 +165,11 @@ const CardWrapper = styled.div`
   will-change: transform, z-index;
   
   @media (max-width: ${theme.breakpoints.tablet}) {
-    height: 350px;
+    height: 420px;
   }
   
   @media (max-width: 430px) {
-    height: 250px;
+    height: 280px;
     justify-content: flex-start;
   }
 `;
@@ -196,7 +196,7 @@ const FeatureCard = styled.div`
   }
   
   @media (max-width: 430px) {
-    width: 240px;
+    width: 280px;
     border-radius: 16px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
     
