@@ -44,9 +44,16 @@ const SkipButton = styled(motion.button)`
   }
 
   @media (max-width: 768px) {
+    bottom: 30px;
+    right: 30px;
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+
+  @media (max-width: 320px) {
     bottom: 20px;
     right: 20px;
-    padding: 10px 20px;
+    padding: 8px 16px;
     font-size: 12px;
   }
 `;

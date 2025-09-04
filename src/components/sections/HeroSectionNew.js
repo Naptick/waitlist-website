@@ -27,6 +27,36 @@ const HeroWrapper = styled.div`
     backface-visibility: hidden;
     transform3d: 0;
   }
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    padding-top: 80px;
+  }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    padding-top: 70px;
+  }
+`;
+
+const HeroCard = styled.div`
+  position: relative;
+  overflow: hidden;
+  padding: 60px 40px;
+  border-radius: 24px;
+  background-image: url(${heroBgImage});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(0.8) contrast(1.1);
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    padding: 50px 30px;
+    border-radius: 20px;
+  }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    padding: 40px 20px;
+    border-radius: 16px;
+  }
 `;
 
 const HeroContent = styled.div`
@@ -61,6 +91,7 @@ const EarlyBirdBanner = styled(motion.div)`
   left: 0;
   right: 0;
   border-radius: 24px 24px 0 0;
+  z-index: 1;
 
   span {
     color: #ffffff;
@@ -77,14 +108,26 @@ const EarlyBirdBanner = styled(motion.div)`
       font-size: 0.85rem;
     }
   }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    padding: 12px;
+    
+    span {
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+  }
 `;
 
 const HeroTitle = styled(motion.h1)`
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 700;
   margin-bottom: 24px;
+  margin-top: 80px; // Space for the banner
   color: ${theme.colors.text};
   line-height: 1.2;
+  position: relative;
+  z-index: 2;
 
   .white-text {
     color: #ffffff !important;
@@ -96,6 +139,17 @@ const HeroTitle = styled(motion.h1)`
     color: #ff7640 !important;
     background: none !important;
     -webkit-text-fill-color: #ff7640 !important;
+  }
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    margin-top: 70px;
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    margin-top: 60px;
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    margin-bottom: 20px;
   }
 `;
 
@@ -386,20 +440,7 @@ const HeroSectionNew = () => {
 
   return (
     <HeroWrapper ref={sectionRef}>
-      <div
-        ref={cardRef}
-        style={{
-          position: "relative",
-          overflow: "hidden",
-          padding: "60px 40px",
-          borderRadius: "24px",
-          backgroundImage: `url(${heroBgImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          filter: "brightness(0.8) contrast(1.1)",
-        }}
-      >
+      <HeroCard ref={cardRef}>
         {/* Video background removed - using theme background instead */}
 
         <HeroContent>
@@ -500,7 +541,7 @@ const HeroSectionNew = () => {
             </ProductImageContainer>
           </HeroImage>
         </HeroContent>
-      </div>
+      </HeroCard>
 
       {/* Video Modal */}
       <AnimatePresence>

@@ -46,10 +46,23 @@ const ContentGrid = styled.div`
     gap: 40px;
     padding: 0 20px;
   }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+    padding: 0 20px;
+  }
 `;
 
 const TextSection = styled.div`
   z-index: 2;
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    width: 100%;
+    text-align: left;
+  }
 `;
 
 const Title = styled(motion.h2)`
@@ -69,6 +82,12 @@ const Title = styled(motion.h2)`
     background: none !important;
     -webkit-text-fill-color: #ffffff !important;
   }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    font-size: 2rem;
+    margin-bottom: 16px;
+    text-align: left;
+  }
 `;
 
 const Subtitle = styled(motion.p)`
@@ -76,6 +95,14 @@ const Subtitle = styled(motion.p)`
   color: ${theme.colors.textSecondary};
   line-height: 1.6;
   margin-bottom: 40px;
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+    text-align: left;
+    padding-right: 10px;
+    line-height: 1.4;
+  }
 `;
 
 const CardsSection = styled.div`
@@ -85,6 +112,21 @@ const CardsSection = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    height: 300px;
+  }
+  
+  @media (max-width: 430px) {
+    height: 250px;
+    width: 100%;
+    margin: 0;
+    justify-content: flex-start;
+    padding-left: 20px;
+    overflow: hidden;
+    align-items: flex-start;
+    padding-top: 20px;
+  }
 `;
 
 const CardContainer = styled.div`
@@ -95,6 +137,19 @@ const CardContainer = styled.div`
   align-items: center;
   overflow: visible;
   perspective: 1000px;
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    width: 600px;
+    height: 350px;
+  }
+  
+  @media (max-width: 430px) {
+    width: 100%;
+    height: 250px;
+    margin: 0;
+    position: relative;
+    padding-left: 0;
+  }
 `;
 
 const CardWrapper = styled.div`
@@ -108,6 +163,15 @@ const CardWrapper = styled.div`
   justify-content: center;
   transform-origin: center center;
   will-change: transform, z-index;
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    height: 350px;
+  }
+  
+  @media (max-width: 430px) {
+    height: 250px;
+    justify-content: flex-start;
+  }
 `;
 
 const FeatureCard = styled.div`
@@ -124,6 +188,21 @@ const FeatureCard = styled.div`
 
   &:hover {
     transform: scale(1.02);
+  }
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    width: 320px;
+    border-radius: 20px;
+  }
+  
+  @media (max-width: 430px) {
+    width: 240px;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+    
+    &:hover {
+      transform: scale(1.01);
+    }
   }
 `;
 
@@ -149,6 +228,14 @@ const CardContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    padding: 20px;
+  }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    padding: 15px;
+  }
 `;
 
 const CardTitle = styled.h3`
@@ -157,6 +244,15 @@ const CardTitle = styled.h3`
   color: #fff;
   margin-bottom: 8px;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    font-size: 1.3rem;
+  }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+  }
 `;
 
 const CardDescription = styled.p`
@@ -164,6 +260,15 @@ const CardDescription = styled.p`
   color: rgba(255, 255, 255, 0.9);
   line-height: 1.4;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    font-size: 0.9rem;
+  }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    font-size: 0.85rem;
+    line-height: 1.3;
+  }
 `;
 
 const RingFeaturesSectionGSAP = () => {
@@ -222,17 +327,45 @@ const RingFeaturesSectionGSAP = () => {
       },
     });
 
-    // Initial setup: First card on left, second card partially visible on right with gap
-    // Card 1 is fully visible, Card 2 shows 20% with gap
+    // Get responsive card positioning values
+    const getCardPositions = () => {
+      const screenWidth = window.innerWidth;
+      if (screenWidth <= 430) { // Covers all mobile sizes including your 379px
+        // Mobile: Cards with increased spacing and moved further left
+        return { 
+          startX: -20, // Start 20px left of container edge (even further left)
+          partialOffset: 200, // Increased gap - 240px card + 40px gap = better separation
+          hiddenOffset: 340 // Hide cards off right edge
+        };
+      } else if (screenWidth <= 768) {
+        // Tablet: Medium gaps
+        return { 
+          startX: 0,
+          partialOffset: 350, 
+          hiddenOffset: 450 
+        };
+      } else {
+        // Desktop: Original values
+        return { 
+          startX: 0,
+          partialOffset: 520, 
+          hiddenOffset: 720 
+        };
+      }
+    };
+
+    const { startX = 0, partialOffset, hiddenOffset } = getCardPositions();
+
+    // Initial setup: First card positioned from startX, second card partially visible
     gsap.set(cards[0], {
-      x: 0,
+      x: startX,
       zIndex: 1, // Lower z-index so cards can slide over it
       opacity: 1,
       immediateRender: true,
     });
 
     gsap.set(cards[1], {
-      x: 520, // Position to the right with gap adjusted for 480px wide cards (shows ~20% of card)
+      x: startX + partialOffset, // Responsive positioning from start point
       zIndex: 2, // Higher z-index to slide over card 1
       opacity: 1,
       immediateRender: true,
@@ -242,7 +375,7 @@ const RingFeaturesSectionGSAP = () => {
     cards.forEach((card, index) => {
       if (index > 1) {
         gsap.set(card, {
-          x: 720,
+          x: startX + hiddenOffset,
           zIndex: index + 1, // Progressive z-index
           opacity: 0,
           immediateRender: true,
@@ -255,49 +388,49 @@ const RingFeaturesSectionGSAP = () => {
 
     // Card 2 slides left OVER Card 1 (higher z-index ensures it covers card 1)
     tl.to(cards[1], {
-      x: 0, // Slide left to cover card 1
+      x: startX, // Slide left to cover card 1
       duration: 1.5,
       ease: "power1.inOut",
     })
       // Card 3 appears from right with gap
       .fromTo(
         cards[2],
-        { x: 720, opacity: 0, zIndex: 3 },
-        { x: 520, opacity: 1, duration: 1.2, ease: "power1.out" },
+        { x: startX + hiddenOffset, opacity: 0, zIndex: 3 },
+        { x: startX + partialOffset, opacity: 1, duration: 1.2, ease: "power1.out" },
         "-=0.8"
       );
 
     // Card 3 slides left OVER the stack (cards 1 & 2)
     tl.to(cards[2], {
-      x: 0, // Slide left to cover the stack
+      x: startX, // Slide left to cover the stack
       duration: 1.5,
       ease: "power1.inOut",
     })
       // Card 4 appears from right with gap
       .fromTo(
         cards[3],
-        { x: 720, opacity: 0, zIndex: 4 },
-        { x: 520, opacity: 1, duration: 1.2, ease: "power1.out" },
+        { x: startX + hiddenOffset, opacity: 0, zIndex: 4 },
+        { x: startX + partialOffset, opacity: 1, duration: 1.2, ease: "power1.out" },
         "-=0.8"
       );
 
     // Card 4 slides left OVER the stack
     tl.to(cards[3], {
-      x: 0, // Slide left to cover the stack
+      x: startX, // Slide left to cover the stack
       duration: 1.5,
       ease: "power1.inOut",
     })
       // Card 5 appears from right with gap
       .fromTo(
         cards[4],
-        { x: 720, opacity: 0, zIndex: 5 },
-        { x: 520, opacity: 1, duration: 1.2, ease: "power1.out" },
+        { x: startX + hiddenOffset, opacity: 0, zIndex: 5 },
+        { x: startX + partialOffset, opacity: 1, duration: 1.2, ease: "power1.out" },
         "-=0.8"
       );
 
     // Final: Card 5 slides left OVER all previous cards
     tl.to(cards[4], {
-      x: 0, // Slide left to cover all cards
+      x: startX, // Slide left to cover all cards
       duration: 1.5,
       ease: "power1.inOut",
     });
@@ -327,10 +460,9 @@ const RingFeaturesSectionGSAP = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <span className="white-text">Meet</span>{" "}
-              <span className="green-text">Naphome</span>
+              <span className="white-text">Meet</span>
               <br />
-              <span className="white-text"></span>
+              <span className="green-text">Naphome</span>
             </Title>
             <Subtitle
               initial={{ opacity: 0, y: 20 }}

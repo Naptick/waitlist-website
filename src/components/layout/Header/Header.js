@@ -9,27 +9,30 @@ import { triggerViralLoopsPopup } from "../../../utils/viralLoops";
 const HeaderContainer = styled(motion.header)`
   position: fixed;
   top: 10px;
-  left: 0;
-  right: 0;
+  left: 10px;
+  right: 10px;
   z-index: 1000;
-  width: 100%;
   display: flex;
   justify-content: center;
-  background: rgba(26, 26, 26, 0.8);
+  background: rgba(26, 26, 26, 0.95);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   overflow: hidden;
-  margin: 0 20px;
-  max-width: calc(1400px + 40px);
-
-  @media (max-width: calc(1400px + 80px)) {
-    margin: 0 20px;
-  }
+  margin: 0 auto;
+  max-width: 1400px;
 
   @media (max-width: ${theme.breakpoints.tablet}) {
-    margin: 0 10px;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    border-radius: 20px;
+  }
+
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    border-radius: 16px;
+    background: rgba(26, 26, 26, 0.98);
   }
 `;
 
@@ -40,14 +43,15 @@ const HeaderContent = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: 1400px;
   justify-content: space-between;
 
   @media (max-width: ${theme.breakpoints.tablet}) {
-    padding: 16px 24px;
-    flex-direction: column;
-    gap: 12px;
-    max-width: 100%;
+    padding: 12px 16px;
+    justify-content: space-between;
+  }
+
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    padding: 10px 12px;
   }
 `;
 
@@ -55,6 +59,7 @@ const Logo = styled(motion.div)`
   cursor: pointer;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 
   img {
     height: 40px;
@@ -62,11 +67,11 @@ const Logo = styled(motion.div)`
     object-fit: contain;
 
     @media (max-width: ${theme.breakpoints.tablet}) {
-      height: 36px;
+      height: 32px;
     }
 
     @media (max-width: ${theme.breakpoints.mobile}) {
-      height: 32px;
+      height: 28px;
     }
   }
 `;
@@ -126,6 +131,10 @@ const PreorderButton = styled(motion.button)`
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(255, 118, 64, 0.4);
   }
+
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    display: none;  // Hide on tablet/mobile, show in mobile menu
+  }
 `;
 
 const MobileMenuButton = styled(motion.button)`
@@ -134,46 +143,52 @@ const MobileMenuButton = styled(motion.button)`
   border: none;
   cursor: pointer;
   padding: 5px;
+  margin-left: auto;
 
   @media (max-width: ${theme.breakpoints.tablet}) {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
 const MenuLine = styled.span`
-  width: 25px;
+  width: 22px;
   height: 2px;
   background: ${theme.colors.text};
   transition: all ${theme.transitions.fast};
   display: block;
+  transform-origin: center;
 
   &:nth-child(1) {
     transform: ${(props) =>
-      props.$isOpen ? "rotate(45deg) translateY(6px)" : "none"};
+      props.$isOpen ? "rotate(45deg) translateY(5px)" : "none"};
   }
 
   &:nth-child(2) {
     opacity: ${(props) => (props.$isOpen ? "0" : "1")};
+    transform: ${(props) =>
+      props.$isOpen ? "scaleX(0)" : "scaleX(1)"};
   }
 
   &:nth-child(3) {
     transform: ${(props) =>
-      props.$isOpen ? "rotate(-45deg) translateY(-6px)" : "none"};
+      props.$isOpen ? "rotate(-45deg) translateY(-5px)" : "none"};
   }
 `;
 
 const MobileMenu = styled(motion.div)`
   display: none;
   position: fixed;
-  top: 90px;
-  left: 20px;
-  right: 20px;
-  background: rgba(0, 0, 0, 0.9);
+  top: 70px;
+  left: 10px;
+  right: 10px;
+  background: rgba(26, 26, 26, 0.98);
   backdrop-filter: blur(20px);
-  padding: 24px;
-  border-radius: 15px;
+  padding: 20px;
+  border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   z-index: 999;
@@ -181,24 +196,40 @@ const MobileMenu = styled(motion.div)`
   @media (max-width: ${theme.breakpoints.tablet}) {
     display: block;
   }
+
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    top: 60px;
+    left: 5px;
+    right: 5px;
+    padding: 16px;
+    border-radius: 12px;
+  }
 `;
 
 const MobileNavLinks = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 20px;
   align-items: center;
+
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    gap: 16px;
+  }
 `;
 
 const MobileNavLink = styled(motion.a)`
   color: ${theme.colors.text};
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 500;
   transition: color ${theme.transitions.fast};
   cursor: pointer;
 
   &:hover {
-    color: ${theme.colors.primary};
+    color: #ff7640;
+  }
+
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    font-size: 0.95rem;
   }
 `;
 
@@ -278,19 +309,11 @@ const Header = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleLogoClick}
-            style={{ order: 1, marginLeft: "0", marginRight: "auto" }}
           >
             <img src={logo} alt="Naptick Logo" />
           </Logo>
 
-          <Navigation
-            style={{
-              flex: 1,
-              order: 2,
-              justifyContent: "center",
-              margin: "0 40px",
-            }}
-          >
+          <Navigation>
             <NavLinks>
               {navItems.map((item, index) => (
                 <NavLink
@@ -309,7 +332,6 @@ const Header = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={triggerViralLoopsPopup}
-            style={{ order: 3, marginRight: "0", marginLeft: "auto" }}
           >
             Join the Waitlist
           </PreorderButton>
@@ -317,7 +339,6 @@ const Header = () => {
           <MobileMenuButton
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             whileTap={{ scale: 0.9 }}
-            style={{ order: 4 }}
           >
             <MenuLine $isOpen={mobileMenuOpen} />
             <MenuLine $isOpen={mobileMenuOpen} />

@@ -40,6 +40,11 @@ const ContentContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    top: 30%; /* Title positioned much higher on mobile */
+    transform: translate(-50%, 0); /* Don't center vertically, start from top */
+  }
 `;
 
 const Title = styled(motion.h1)`
@@ -52,8 +57,16 @@ const Title = styled(motion.h1)`
   letter-spacing: 1px;
   white-space: nowrap;
 
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    font-size: 2rem;
+  }
+
   @media (max-width: ${theme.breakpoints.mobile}) {
     white-space: normal;
+    font-size: 1.4rem;
+    letter-spacing: 0px;
+    padding: 0 20px;
+    line-height: 1.2;
   }
 `;
 
@@ -88,6 +101,20 @@ const TextContainer = styled.div`
   max-width: 900px;
   width: 90%;
   height: 100px; /* Fixed height to contain all text elements */
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    max-width: 700px;
+    width: 85%;
+    top: 60%;
+  }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    max-width: 320px;
+    width: 90%;
+    top: 55%; /* Text positioned much lower with clear gap from title at 30% */
+    height: 80px;
+    transform: translate(-50%, 0); /* Start from top position, don't center */
+  }
 `;
 
 const SequentialText = styled.p`
@@ -105,8 +132,15 @@ const SequentialText = styled.p`
   letter-spacing: 0.5px;
   opacity: 0; /* Initially hidden for GSAP animation */
 
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+    line-height: 1.5;
+  }
+
   @media (max-width: ${theme.breakpoints.mobile}) {
-    font-size: 1.1rem;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.3px;
   }
 `;
 
