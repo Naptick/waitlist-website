@@ -1,15 +1,16 @@
 export const theme = {
   colors: {
-    primary: '#7c3aed',
-    primaryLight: '#a78bfa',
-    primaryDark: '#5b21b6',
+    primary: '#ff7640',
+    primaryLight: '#ff8f5a',
+    primaryDark: '#e55a2b',
     secondary: '#10b981',
-    background: '#1a1a1a',
-    backgroundLight: '#2a2a2a',
+    background: '#0a0a0a',
+    backgroundLight: '#1a1a1a',
     text: '#ffffff',
     textSecondary: '#a1a1aa',
     accent: '#f59e0b',
-    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    border: 'rgba(255, 255, 255, 0.1)',
+    gradient: 'linear-gradient(135deg, #ff7640 0%, #e55a2b 100%)',
     gradientPurple: 'linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%)',
   },
   breakpoints: {

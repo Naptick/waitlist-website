@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
 import { theme } from "../../../styles/theme";
 import logo from "../../../assets/images/brand-logo/logo1.png";
-import { triggerViralLoopsPopup } from "../../../utils/viralLoops";
+import { joinWaitlist } from "../../../utils/waitlistService";
 
 const HeaderContainer = styled(motion.header)`
   position: fixed;
@@ -308,7 +308,7 @@ const Header = () => {
           <PreorderButton
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={triggerViralLoopsPopup}
+            onClick={joinWaitlist}
             style={{ order: 3, marginRight: "0", marginLeft: "auto" }}
           >
             Join the Waitlist
@@ -347,7 +347,7 @@ const Header = () => {
             <PreorderButton
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={triggerViralLoopsPopup}
+              onClick={joinWaitlist}
               style={{ marginTop: "10px" }}
             >
               Join the Waitlist

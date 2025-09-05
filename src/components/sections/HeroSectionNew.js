@@ -7,10 +7,10 @@ import productHeroImage from "../../assets/images/product-hero3.png";
 import heroBgImage from "../../assets/images/hero-bg.png";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {
-  triggerViralLoopsPopup,
-  checkViralLoopsStatus,
-} from "../../utils/viralLoops";
+import { joinWaitlist } from "../../utils/waitlistService";
+import { checkViralLoopsStatus } from "../../utils/viralLoops";
+import CustomWaitlistForm from "../waitlist/CustomWaitlistForm";
+import ShareModal from "../waitlist/ShareModal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -301,6 +301,9 @@ const HeroSectionNew = () => {
   const cardRef = useRef(null);
   const videoRef = useRef(null);
   const [showVideoModal, setShowVideoModal] = useState(false);
+  const [showWaitlistForm, setShowWaitlistForm] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [userData, setUserData] = useState(null);
 
   const handleNaphomeClick = () => {
     setShowVideoModal(true);
@@ -314,8 +317,30 @@ const HeroSectionNew = () => {
     }
   };
 
-  const handleJoinWaitlist = () => {
-    triggerViralLoopsPopup();
+  const handleJoinWaitlist = async () => {
+    try {
+      const result = await joinWaitlist();
+      if (result.showCustomForm) {
+        setShowWaitlistForm(true);
+      }
+    } catch (error) {
+      console.error('Error joining waitlist:', error);
+    }
+  };
+
+  const handleWaitlistSuccess = (data) => {
+    setUserData(data);
+    setShowWaitlistForm(false);
+    setShowShareModal(true);
+  };
+
+  const handleCloseWaitlistForm = () => {
+    setShowWaitlistForm(false);
+  };
+
+  const handleCloseShareModal = () => {
+    setShowShareModal(false);
+    setUserData(null);
   };
 
   // Initialize Viral Loops widgets
@@ -532,6 +557,18 @@ const HeroSectionNew = () => {
           </VideoModal>
         )}
       </AnimatePresence>
+
+      <CustomWaitlistForm
+        isOpen={showWaitlistForm}
+        onClose={handleCloseWaitlistForm}
+        onSuccess={handleWaitlistSuccess}
+      />
+
+      <ShareModal
+        isOpen={showShareModal}
+        onClose={handleCloseShareModal}
+        userData={userData}
+      />
     </HeroWrapper>
   );
 };
