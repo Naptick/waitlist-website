@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 const SectionContainer = styled.section`
   position: relative;
   width: 100%;
-  height: 500vh; /* Provide enough height for ScrollTrigger pinning and scrubbing */
+  height: 200vh; /* Reduced height since we're auto-scrolling after text sequence */
   background: #000;
 `;
 
@@ -177,6 +177,8 @@ const SleepProblemsSection = () => {
   const pinnedRef = useRef(null);
   const titleRef = useRef(null);
   const textsRef = useRef([]);
+  const animationTimeouts = useRef([]);
+  const isAnimationRunning = useRef(false);
 
   const texts = [
     "Stress and racing thoughts keep the mind wired.",
@@ -201,66 +203,186 @@ const SleepProblemsSection = () => {
       });
     }
 
-    // Create timeline for scroll-triggered animations
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        pin: pinned,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: 1,
-        anticipatePin: 1,
-        pinSpacing: true,
-        id: "sleep-problems-section",
-        onEnter: () => {
-          // Ensure video plays when section enters
-          if (video && video.paused) {
-            video.play().catch((error) => {
-              console.log("Video play failed:", error);
-            });
-          }
-        }
-      },
-    });
-
     // Initially hide title and all texts
     gsap.set(title, { opacity: 0, y: 30 });
     gsap.set(textElements, { opacity: 0, y: 20 });
 
-    // Timeline sequence:
-    // 1. Show title first
-    tl.to(title, {
-      opacity: 1,
-      y: 0,
-      duration: 1,
-      ease: "power2.out"
-    });
+    // Define animation functions first
+    const autoScrollToNextSection = () => {
+      // Get the next section after this one
+      const nextSection = section.nextElementSibling;
+      if (nextSection) {
+        // Smooth scroll to next section
+        nextSection.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      } else {
+        // If no next section, scroll past this section
+        const sectionBottom = section.offsetTop + section.offsetHeight;
+        window.scrollTo({
+          top: sectionBottom,
+          behavior: 'smooth'
+        });
+      }
+    };
 
-    // 2. Show each text line sequentially with fade in/out
-    textElements.forEach((textEl, index) => {
-      // Fade in
-      tl.to(textEl, {
+    const startSequentialAnimation = () => {
+      // Clear any existing timeouts and stop previous animation
+      animationTimeouts.current.forEach(timeout => clearTimeout(timeout));
+      animationTimeouts.current = [];
+      
+      // Kill any running GSAP animations on texts and title
+      gsap.killTweensOf([title, ...textElements]);
+      
+      // Reset all elements to initial state
+      gsap.set(title, { opacity: 0, y: 30 });
+      gsap.set(textElements, { opacity: 0, y: 20 });
+      
+      isAnimationRunning.current = true;
+      console.log("🔄 Starting sleep problems animation sequence");
+      
+      // 1. Show title first
+      gsap.to(title, {
         opacity: 1,
         y: 0,
-        duration: 0.8,
+        duration: 1,
         ease: "power2.out"
-      }, `+=${index === 0 ? 0.5 : 0.2}`) // First text has more delay after title
+      });
+
+      // 2. Create looping text animation
+      let currentTextIndex = 0;
+      let loopCount = 0;
       
-      // Fade out (except for the last one)
-      .to(textEl, {
-        opacity: 0,
-        y: -10,
-        duration: 0.6,
-        ease: "power2.in"
-      }, `+=${1.2}`); // Hold for 1.2 seconds before fading out
+      const showNextText = () => {
+        if (!isAnimationRunning.current) {
+          console.log("🛑 Animation stopped");
+          return;
+        }
+        
+        const textEl = textElements[currentTextIndex];
+        
+        console.log(`📱 Showing text ${currentTextIndex + 1}`);
+        
+        // Fade in current text
+        gsap.to(textEl, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power2.out"
+        });
+
+        // Fade out after 2 seconds
+        gsap.to(textEl, {
+          opacity: 0,
+          y: -10,
+          duration: 0.6,
+          ease: "power2.in",
+          delay: 2, // Stay for 2 seconds then fade out
+          onComplete: () => {
+            if (!isAnimationRunning.current) return;
+            
+            currentTextIndex++;
+            
+            // Check if we completed one full loop (all 4 texts)
+            if (currentTextIndex >= textElements.length) {
+              currentTextIndex = 0; // Reset for next loop
+              loopCount++;
+              console.log(`✅ Completed loop ${loopCount}`);
+              
+              // Auto-scroll after first complete loop
+              if (loopCount === 1) {
+                console.log("🚀 First loop completed - auto-scrolling to next section");
+                const autoScrollTimeout = setTimeout(() => {
+                  if (isAnimationRunning.current) {
+                    autoScrollToNextSection();
+                  }
+                }, 1000); // Wait 1 second after loop completion
+                animationTimeouts.current.push(autoScrollTimeout);
+                return;
+              }
+            }
+            
+            // Continue to next text after 1 second gap
+            const nextTextTimeout = setTimeout(() => {
+              showNextText();
+            }, 1000);
+            animationTimeouts.current.push(nextTextTimeout);
+          }
+        });
+      };
+
+      // Start the looping sequence after title appears
+      const startTimeout = setTimeout(() => {
+        showNextText();
+      }, 1500); // Start 1.5 seconds after title
+      animationTimeouts.current.push(startTimeout);
+    };
+
+    // Create ScrollTrigger to pin the section
+    const pinTrigger = ScrollTrigger.create({
+      trigger: section,
+      pin: pinned,
+      start: "top top",
+      end: "bottom bottom",
+      pinSpacing: true,
+      id: "sleep-problems-pin",
+      onEnter: () => {
+        console.log("🎯 Sleep problems section entered - starting animation");
+        // Start the sequential animation when entering the section
+        startSequentialAnimation();
+        
+        // Ensure video plays when section enters
+        if (video && video.paused) {
+          video.play().catch((error) => {
+            console.log("Video play failed:", error);
+          });
+        }
+      },
+      onEnterBack: () => {
+        console.log("🔄 Sleep problems section re-entered - restarting animation");
+        // Restart animation when scrolling back to this section
+        startSequentialAnimation();
+        
+        // Ensure video plays when section re-enters
+        if (video && video.paused) {
+          video.play().catch((error) => {
+            console.log("Video play failed:", error);
+          });
+        }
+      },
+      onLeave: () => {
+        console.log("🚪 Sleep problems section left - stopping animation");
+        // Stop animation when leaving section
+        isAnimationRunning.current = false;
+        animationTimeouts.current.forEach(timeout => clearTimeout(timeout));
+        animationTimeouts.current = [];
+      },
+      onLeaveBack: () => {
+        console.log("🚪 Sleep problems section left (back) - stopping animation");
+        // Stop animation when leaving section backwards
+        isAnimationRunning.current = false;
+        animationTimeouts.current.forEach(timeout => clearTimeout(timeout));
+        animationTimeouts.current = [];
+      }
     });
 
     return () => {
       // Cleanup
-      if (tl.scrollTrigger) {
-        tl.scrollTrigger.kill();
+      console.log("🧹 Cleaning up sleep problems section");
+      isAnimationRunning.current = false;
+      
+      // Clear all timeouts
+      animationTimeouts.current.forEach(timeout => clearTimeout(timeout));
+      animationTimeouts.current = [];
+      
+      // Kill GSAP animations
+      gsap.killTweensOf([title, ...textElements]);
+      
+      // Kill ScrollTrigger
+      if (pinTrigger) {
+        pinTrigger.kill();
       }
-      tl.kill();
     };
   }, [texts]);
 

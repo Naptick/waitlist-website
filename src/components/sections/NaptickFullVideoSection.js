@@ -19,6 +19,52 @@ const VideoSectionContainer = styled.section`
   }
 `;
 
+const CloseButton = styled.button`
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    top: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    font-size: 1.8rem;
+  }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.6rem;
+  }
+`;
+
 const SectionTitle = styled.h2`
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 700;
@@ -166,11 +212,11 @@ const FullscreenExitIcon = () => (
   </svg>
 );
 
-const NaptickFullVideoSection = () => {
+const NaptickFullVideoSection = ({ onClose }) => {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true); // START MUTED for autoplay
   const [volume, setVolume] = useState(0.5);
   const [showControls, setShowControls] = useState(true);
   const [controlsTimeout, setControlsTimeout] = useState(null);
@@ -260,12 +306,45 @@ const NaptickFullVideoSection = () => {
     }
   };
 
-  // Initialize video volume and muted state
+  const handleClose = () => {
+    // Pause video before closing
+    const video = videoRef.current;
+    if (video) {
+      video.pause();
+      setIsPlaying(false);
+    }
+    
+    // Call the onClose callback if provided
+    if (onClose) {
+      onClose();
+    } else {
+      // Default behavior: scroll to top or hide section
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  // Initialize video and attempt autoplay
   React.useEffect(() => {
     const video = videoRef.current;
     if (video) {
       video.volume = 0.5; // Set to 50%
-      video.muted = false; // Unmuted by default
+      video.muted = true; // MUTED for autoplay compliance
+      
+      // Attempt to autoplay the video
+      const playVideo = async () => {
+        try {
+          await video.play();
+          setIsPlaying(true);
+          console.log('✅ Video autoplay successful');
+        } catch (error) {
+          console.log('⚠️ Autoplay failed, waiting for user interaction:', error);
+          // Show controls if autoplay fails
+          setShowControls(true);
+        }
+      };
+      
+      // Small delay to ensure video is loaded
+      setTimeout(playVideo, 100);
     }
   }, []);
 
@@ -290,6 +369,11 @@ const NaptickFullVideoSection = () => {
 
   return (
     <VideoSectionContainer>
+      {/* Close button - always visible */}
+      {/* <CloseButton onClick={handleClose} aria-label="Close video">
+        ✕
+      </CloseButton> */}
+      
       <SectionTitle>
         <span className="orange-text">Naptick</span> Full
       </SectionTitle>
@@ -303,6 +387,11 @@ const NaptickFullVideoSection = () => {
           ref={videoRef}
           onClick={handlePlayPause}
           onEnded={handleVideoEnd}
+          autoPlay
+          muted
+          playsInline
+          preload="auto"
+          loop
         >
           <source src="https://naptickvideos.s3.ap-south-1.amazonaws.com/Naptick-Full.mp4" type="video/mp4" />
           Your browser does not support the video tag.

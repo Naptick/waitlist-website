@@ -2,28 +2,51 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" href="%PUBLIC_URL%/nap-logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
       content="Sleep More. Stress Less. Transform your health with intelligent sleep tracking."
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/nap-logo.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     
     <!-- Service Worker for Asset Caching -->
     <link rel="prefetch" href="%PUBLIC_URL%/sw.js" />
     <title>Naptick - Smart Sleep Tracking</title>
-    <!-- Viral Loops Loader -->
-    <script type="text/javascript" src="https://app.viral-loops.com/widgetsV2/core/loader.js" data-campaign-id="Q8HkUB784WN0NDytaI3oIH674K8" id="viral-loops-loader"></script>
+    <!-- Viral Loops Loader - Delayed loading for local development -->
+    <script>
+      // Delay Viral Loops loading to prevent development errors
+      window.addEventListener('load', function() {
+        setTimeout(() => {
+          const script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.src = 'https://app.viral-loops.com/widgetsV2/core/loader.js';
+          script.setAttribute('data-campaign-id', 'Q8HkUB784WN0NDytaI3oIH674K8');
+          script.id = 'viral-loops-loader';
+          document.head.appendChild(script);
+        }, 1000);
+      });
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     
-    <!-- Viral Loops Form Widgets -->
-    <form-widget mode='popup' ucid='Q8HkUB784WN0NDytaI3oIH674K8' style='display: none;'></form-widget>
+    <!-- Viral Loops Form Widgets - Loaded dynamically -->
+    <script>
+      // Add form widget after Viral Loops script is loaded
+      window.addEventListener('load', function() {
+        setTimeout(() => {
+          const widget = document.createElement('form-widget');
+          widget.setAttribute('mode', 'popup');
+          widget.setAttribute('ucid', 'Q8HkUB784WN0NDytaI3oIH674K8');
+          widget.style.display = 'none';
+          document.body.appendChild(widget);
+        }, 2000);
+      });
+    </script>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
