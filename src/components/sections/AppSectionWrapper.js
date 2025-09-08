@@ -40,14 +40,14 @@ const ContentWrapper = styled.div`
   width: 100%;
   max-width: 1400px;
   margin: 0;
-  padding: 60px 20px 60px 20px;
+  padding: 35px 20px 60px 20px;
   
   @media (max-width: ${theme.breakpoints.tablet}) {
-    padding: 40px 20px;
+    padding: 20px 20px 40px 20px;
   }
   
   @media (max-width: ${theme.breakpoints.mobile}) {
-    padding: 20px 10px;
+    padding: 10px 10px 20px 10px;
   }
 `;
 

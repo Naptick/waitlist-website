@@ -108,31 +108,31 @@ const Subtitle = styled(motion.p)`
 const CardsSection = styled.div`
   position: relative;
   width: 100%;
-  height: 400px;
+  height: 500px;
   display: flex;
   align-items: center;
   justify-content: center;
   
   @media (max-width: ${theme.breakpoints.tablet}) {
-    height: 300px;
+    height: 380px;
   }
   
   @media (max-width: 430px) {
-    height: 250px;
+    height: 280px;
     width: 100%;
     margin: 0;
     justify-content: flex-start;
     padding-left: 20px;
     overflow: hidden;
     align-items: flex-start;
-    padding-top: 20px;
+    padding-top: 0;
   }
 `;
 
 const CardContainer = styled.div`
   position: relative;
   width: 900px;
-  height: 450px;
+  height: 550px;
   display: flex;
   align-items: center;
   overflow: visible;
@@ -140,12 +140,12 @@ const CardContainer = styled.div`
   
   @media (max-width: ${theme.breakpoints.tablet}) {
     width: 600px;
-    height: 350px;
+    height: 420px;
   }
   
   @media (max-width: 430px) {
     width: 100%;
-    height: 250px;
+    height: 280px;
     margin: 0;
     position: relative;
     padding-left: 0;
@@ -157,7 +157,7 @@ const CardWrapper = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 450px;
+  height: 550px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -165,11 +165,11 @@ const CardWrapper = styled.div`
   will-change: transform, z-index;
   
   @media (max-width: ${theme.breakpoints.tablet}) {
-    height: 350px;
+    height: 420px;
   }
   
   @media (max-width: 430px) {
-    height: 250px;
+    height: 280px;
     justify-content: flex-start;
   }
 `;
@@ -196,7 +196,7 @@ const FeatureCard = styled.div`
   }
   
   @media (max-width: 430px) {
-    width: 240px;
+    width: 280px;
     border-radius: 16px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
     
@@ -275,6 +275,9 @@ const RingFeaturesSectionGSAP = () => {
   const sectionRef = useRef(null);
   const pinnedRef = useRef(null);
   const cardsRef = useRef([]);
+  const autoSequenceRef = useRef(null);
+  const userScrollDetectedRef = useRef(false);
+  const autoSequenceTimeouts = useRef([]);
 
   const cardData = [
     {
@@ -435,11 +438,221 @@ const RingFeaturesSectionGSAP = () => {
       ease: "power1.inOut",
     });
 
+    // REVERSE AUTO SEQUENCE - for scrolling backwards
+    const startReverseAutoSequence = () => {
+      console.log("🔄 Starting REVERSE card sequence...");
+      
+      // Clear any existing timeouts
+      autoSequenceTimeouts.current.forEach(timeout => clearTimeout(timeout));
+      autoSequenceTimeouts.current = [];
+      
+      // Start at the END with Card 5 visible
+      gsap.set(tl, { progress: 1 });
+      
+      console.log("✅ Ring section reverse state: Card 5 visible");
+
+      // Schedule reverse card transitions
+      const scheduleReverseCardTransition = (cardNum) => {
+        if (cardNum < 3) {
+          // After Card 3, auto-scroll back to sleep-problems section
+          const autoScrollTimeout = setTimeout(() => {
+            if (!userScrollDetectedRef.current) {
+              console.log("🚀 Auto-scrolling back to sleep-problems section...");
+              const sleepProblemsSection = section.previousElementSibling;
+              if (sleepProblemsSection) {
+                sleepProblemsSection.scrollIntoView({ 
+                  behavior: 'smooth',
+                  block: 'start'
+                });
+              }
+            }
+          }, 3000); // Card 3 stays for 3 seconds before scrolling
+          autoSequenceTimeouts.current.push(autoScrollTimeout);
+          return;
+        }
+
+        // Calculate target progress for going backwards
+        const targetProgress = (cardNum - 1) * 0.25; // 0.75 for card 4, 0.5 for card 3
+        
+        // Wait time before transition (3 seconds display + 1 second gap)
+        const waitTime = cardNum === 5 ? 3000 : 4000; // Card 5 only waits 3s, others wait 4s
+        
+        const transitionTimeout = setTimeout(() => {
+          if (!userScrollDetectedRef.current) {
+            console.log(`📱 Reverse transition: Card ${cardNum - 1} sliding back`);
+            
+            // Animate backwards to show previous card
+            gsap.to(tl, {
+              progress: targetProgress,
+              duration: 1.5, // Match the original timeline duration
+              ease: "power1.inOut", // Match the original easing
+              onComplete: () => {
+                // Schedule previous card
+                scheduleReverseCardTransition(cardNum - 1);
+              }
+            });
+          }
+        }, waitTime);
+        
+        autoSequenceTimeouts.current.push(transitionTimeout);
+      };
+      
+      // Start with Card 5 (going backwards to Card 4)
+      scheduleReverseCardTransition(5);
+    };
+
+    // AUTO SEQUENCE FUNCTIONALITY - runs alongside scroll-triggered functionality
+    const startAutoSequence = () => {
+      console.log("🔄 Starting automatic card sequence...");
+      
+      // Clear any existing timeouts
+      autoSequenceTimeouts.current.forEach(timeout => clearTimeout(timeout));
+      autoSequenceTimeouts.current = [];
+      
+      // Start at the beginning with Card 1 + partial Card 2 visible
+      gsap.set(tl, { progress: 0 });
+      
+      console.log("✅ Ring section initial state: Card 1 + partial Card 2 visible");
+
+      // Card 1 stays for 3 seconds, then start transitions
+      let currentProgress = 0;
+      
+      // Calculate the timeline duration and sections
+      const totalDuration = tl.duration();
+      const progressPerTransition = 1 / 4; // 4 transitions (card 2, 3, 4, 5)
+      
+      // Schedule Card transitions with exact timeline matching
+      const scheduleCardTransition = (cardNum) => {
+        if (cardNum > 5) {
+          // All cards shown, auto-scroll after 3 seconds
+          const autoScrollTimeout = setTimeout(() => {
+            if (!userScrollDetectedRef.current) {
+              console.log("🚀 Auto-scrolling to next section...");
+              autoScrollToNextSection();
+            }
+          }, 3000);
+          autoSequenceTimeouts.current.push(autoScrollTimeout);
+          return;
+        }
+
+        // Calculate target progress for this card
+        const targetProgress = (cardNum - 1) * progressPerTransition;
+        
+        // Wait time before transition (3 seconds display + 1 second gap)
+        const waitTime = cardNum === 2 ? 3000 : 4000; // First card only waits 3s, others wait 4s (3s + 1s gap)
+        
+        const transitionTimeout = setTimeout(() => {
+          if (!userScrollDetectedRef.current) {
+            console.log(`📱 Auto-transition: Card ${cardNum} sliding to front`);
+            
+            // Animate to the exact timeline position for this card
+            gsap.to(tl, {
+              progress: targetProgress,
+              duration: 1.5, // Match the original timeline duration
+              ease: "power1.inOut", // Match the original easing
+              onComplete: () => {
+                // Schedule next card
+                scheduleCardTransition(cardNum + 1);
+              }
+            });
+          }
+        }, waitTime);
+        
+        autoSequenceTimeouts.current.push(transitionTimeout);
+      };
+      
+      // Start with Card 2 (Card 1 is already visible)
+      scheduleCardTransition(2);
+    };
+
+    // Auto-scroll function to next section
+    const autoScrollToNextSection = () => {
+      console.log("🚀 Auto-scrolling to next section...");
+      const nextSection = section.nextElementSibling;
+      if (nextSection) {
+        nextSection.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      } else {
+        // If no next section, scroll past this section
+        const sectionBottom = section.offsetTop + section.offsetHeight;
+        window.scrollTo({
+          top: sectionBottom,
+          behavior: 'smooth'
+        });
+      }
+    };
+
+    // Detect user scroll to pause auto sequence
+    const handleScroll = () => {
+      userScrollDetectedRef.current = true;
+      console.log("👆 User scroll detected - pausing auto sequence");
+      // Clear all timeouts when user scrolls
+      autoSequenceTimeouts.current.forEach(timeout => clearTimeout(timeout));
+      autoSequenceTimeouts.current = [];
+    };
+
+    // Create a single ScrollTrigger that handles both directions
+    const autoSequenceTrigger = ScrollTrigger.create({
+      trigger: section,
+      start: "top 90%", // Trigger earlier to catch both directions
+      end: "bottom 10%",
+      onEnter: () => {
+        // Entering from above (scrolling down from sleep-problems)
+        userScrollDetectedRef.current = false;
+        console.log("🎯 Section entered from ABOVE - starting FORWARD sequence");
+        startAutoSequence();
+        // Listen for user scroll
+        window.addEventListener('wheel', handleScroll, { passive: true });
+        window.addEventListener('touchmove', handleScroll, { passive: true });
+      },
+      onLeave: () => {
+        // Leaving section (scrolling down to inside-naphome)
+        console.log("🚪 Section left downwards - cleaning up");
+        userScrollDetectedRef.current = true;
+        autoSequenceTimeouts.current.forEach(timeout => clearTimeout(timeout));
+        autoSequenceTimeouts.current = [];
+        window.removeEventListener('wheel', handleScroll);
+        window.removeEventListener('touchmove', handleScroll);
+      },
+      onEnterBack: () => {
+        // Entering from below (scrolling up from inside-naphome)
+        userScrollDetectedRef.current = false;
+        console.log("🔄 Section entered from BELOW - starting REVERSE sequence");
+        startReverseAutoSequence();
+        window.addEventListener('wheel', handleScroll, { passive: true });
+        window.addEventListener('touchmove', handleScroll, { passive: true });
+      },
+      onLeaveBack: () => {
+        // Leaving section (scrolling up to sleep-problems)
+        console.log("🚪 Section left upwards - cleaning up");
+        userScrollDetectedRef.current = true;
+        autoSequenceTimeouts.current.forEach(timeout => clearTimeout(timeout));
+        autoSequenceTimeouts.current = [];
+        window.removeEventListener('wheel', handleScroll);
+        window.removeEventListener('touchmove', handleScroll);
+      }
+    });
+
+    // Store reference for cleanup
+    autoSequenceRef.current = autoSequenceTrigger;
+
     return () => {
       // Kill the specific timeline and its ScrollTrigger
       if (tl) {
         tl.kill();
       }
+      // Kill auto sequence trigger
+      if (autoSequenceRef.current) {
+        autoSequenceRef.current.kill();
+      }
+      // Clear all auto sequence timeouts
+      autoSequenceTimeouts.current.forEach(timeout => clearTimeout(timeout));
+      autoSequenceTimeouts.current = [];
+      // Clean up scroll event listeners
+      window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('touchmove', handleScroll);
       // Clean up any ScrollTriggers created by this component
       ScrollTrigger.getAll().forEach((st) => {
         if (st.trigger === section) {

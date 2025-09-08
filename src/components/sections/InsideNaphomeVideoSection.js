@@ -5,20 +5,22 @@ import { theme } from '../../styles/theme';
 const VideoSectionContainer = styled.section`
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 95vh;
   overflow: hidden;
   background: #000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  padding: 20px 20px 60px 20px;
   
   @media (max-width: ${theme.breakpoints.tablet}) {
-    padding: 20px;
+    padding: 15px 15px 45px 15px;
+    height: 80vh;
   }
   
   @media (max-width: ${theme.breakpoints.mobile}) {
-    padding: 10px;
+    padding: 10px 10px 35px 10px;
+    height: 70vh;
   }
 `;
 
@@ -69,10 +71,11 @@ const SectionTitle = styled.h2`
     font-size: 2.5rem;
   }
   
-  @media (max-width: ${theme.breakpoints.mobile}) {
-    top: 30px;
-    right: 20px;
+  @media (max-width: 768px) {
+    top: 20px;
+    right: 10px;
     font-size: 2rem;
+    width: auto;
   }
 `;
 

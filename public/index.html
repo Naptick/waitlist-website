@@ -2,28 +2,76 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" href="%PUBLIC_URL%/nap-logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="Sleep More. Stress Less. Transform your health with intelligent sleep tracking."
+      content="Be the first to bring NapHome into your bedroom — a smart bedside device that helps you fall asleep faster with light, sound, and sensors."
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    
+    <!-- SEO Meta Tags -->
+    <meta name="keywords" content="AI sleep device, smart bedside device, sleep tracker, NapHome, sleep technology, bedroom automation, sleep improvement, insomnia solution, smart home sleep">
+    <meta name="author" content="Naptick">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="EN">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://naptick.com/">
+    <meta property="og:title" content="Naptick – Your AI-Powered Bedside Sleep Device">
+    <meta property="og:description" content="Be the first to bring NapHome into your bedroom — a smart bedside device that helps you fall asleep faster with light, sound, and sensors.">
+    <meta property="og:image" content="%PUBLIC_URL%/nap-logo.png">
+    <meta property="og:site_name" content="Naptick">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://naptick.com/">
+    <meta property="twitter:title" content="Naptick – Your AI-Powered Bedside Sleep Device">
+    <meta property="twitter:description" content="Be the first to bring NapHome into your bedroom — a smart bedside device that helps you fall asleep faster with light, sound, and sensors.">
+    <meta property="twitter:image" content="%PUBLIC_URL%/nap-logo.png">
+    <meta name="twitter:site" content="@naptick_">
+    <meta name="twitter:creator" content="@naptick_">
+    
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/nap-logo.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     
     <!-- Service Worker for Asset Caching -->
     <link rel="prefetch" href="%PUBLIC_URL%/sw.js" />
-    <title>Naptick - Smart Sleep Tracking</title>
-    <!-- Viral Loops Loader -->
-    <script type="text/javascript" src="https://app.viral-loops.com/widgetsV2/core/loader.js" data-campaign-id="Q8HkUB784WN0NDytaI3oIH674K8" id="viral-loops-loader"></script>
+    <title>Naptick – Your AI-Powered Bedside Sleep Device</title>
+    <!-- Viral Loops Loader - Delayed loading for local development -->
+    <script>
+      // Delay Viral Loops loading to prevent development errors
+      window.addEventListener('load', function() {
+        setTimeout(() => {
+          const script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.src = 'https://app.viral-loops.com/widgetsV2/core/loader.js';
+          script.setAttribute('data-campaign-id', 'Q8HkUB784WN0NDytaI3oIH674K8');
+          script.id = 'viral-loops-loader';
+          document.head.appendChild(script);
+        }, 1000);
+      });
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     
-    <!-- Viral Loops Form Widgets -->
-    <form-widget mode='popup' ucid='Q8HkUB784WN0NDytaI3oIH674K8' style='display: none;'></form-widget>
+    <!-- Viral Loops Form Widgets - Loaded dynamically -->
+    <script>
+      // Add form widget after Viral Loops script is loaded
+      window.addEventListener('load', function() {
+        setTimeout(() => {
+          const widget = document.createElement('form-widget');
+          widget.setAttribute('mode', 'popup');
+          widget.setAttribute('ucid', 'Q8HkUB784WN0NDytaI3oIH674K8');
+          widget.style.display = 'none';
+          document.body.appendChild(widget);
+        }, 2000);
+      });
+    </script>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

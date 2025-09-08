@@ -336,14 +336,14 @@ const Header = () => {
             Join the Waitlist
           </PreorderButton>
 
-          <MobileMenuButton
+          {/* <MobileMenuButton
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             whileTap={{ scale: 0.9 }}
           >
             <MenuLine $isOpen={mobileMenuOpen} />
             <MenuLine $isOpen={mobileMenuOpen} />
             <MenuLine $isOpen={mobileMenuOpen} />
-          </MobileMenuButton>
+          </MobileMenuButton> */}
         </HeaderContent>
       </HeaderContainer>
 

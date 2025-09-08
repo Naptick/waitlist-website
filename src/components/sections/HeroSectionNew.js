@@ -54,7 +54,7 @@ const HeroCard = styled.div`
   }
   
   @media (max-width: ${theme.breakpoints.mobile}) {
-    padding: 40px 20px;
+    padding: 40px 20px 20px 20px;
     border-radius: 16px;
   }
 `;
@@ -256,6 +256,7 @@ const EarlyAccessText = styled(motion.p)`
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
   margin-top: 12px;
+  margin-left: 8px;
   text-align: left;
   font-weight: 500;
 `;
@@ -293,23 +294,31 @@ const VideoElement = styled.video`
 
 const CloseButton = styled.button`
   position: absolute;
-  top: -50px;
-  right: 0;
-  background: transparent;
-  border: none;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   color: #ffffff;
   font-size: 2rem;
   cursor: pointer;
-  padding: 10px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  z-index: 10;
 
   &:hover {
     background: rgba(255, 255, 255, 0.2);
     transform: scale(1.1);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+  
+  &:active {
+    transform: scale(0.95);
   }
 
   @media (max-width: ${theme.breakpoints.mobile}) {
@@ -554,7 +563,7 @@ const HeroSectionNew = () => {
             onClick={handleCloseModal}
           >
             <VideoContainer onClick={(e) => e.stopPropagation()}>
-              <CloseButton onClick={handleCloseModal}>×</CloseButton>
+              {/* <CloseButton onClick={handleCloseModal}>×</CloseButton> */}
               <VideoElement
                 ref={videoRef}
                 controls
