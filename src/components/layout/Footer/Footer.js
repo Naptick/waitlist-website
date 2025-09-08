@@ -375,10 +375,6 @@ const Footer = () => {
               <ContactIcon>📍</ContactIcon>
               Seattle, USA
             </ContactInfo>
-            <ContactInfo>
-              <ContactIcon>🌍</ContactIcon>
-              Worldwide Shipping
-            </ContactInfo>
           </FooterSection>
         </FooterContent>
 

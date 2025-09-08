@@ -92,9 +92,12 @@ const VideoIntro = ({ onComplete, isEnding }) => {
 
   const handleVideoEnd = () => {
     sessionStorage.setItem('hasSeenIntro', 'true');
-    // Keep video visible but fade it out slowly
-    setIsVisible(false);
-    setTimeout(onComplete, 300);
+    // Pause on the last frame for 1 second before fading out
+    setTimeout(() => {
+      // Keep video visible but fade it out slowly
+      setIsVisible(false);
+      setTimeout(onComplete, 500);
+    }, 1000); // Wait 1 second on the last frame
   };
 
   const handleSkip = () => {
@@ -113,7 +116,7 @@ const VideoIntro = ({ onComplete, isEnding }) => {
           initial={{ opacity: 1 }}
           animate={{ opacity: isEnding ? 0.3 : 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 1.2, ease: "easeInOut" }}
         >
           <Video
             ref={videoRef}
