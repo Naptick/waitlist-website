@@ -35,10 +35,7 @@ const HeroCard = styled.div`
   overflow: hidden;
   padding: 60px 40px;
   border-radius: 24px;
-  background-image: url(${heroBgImage});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: black;
   filter: brightness(0.8) contrast(1.1);
   
   @media (max-width: ${theme.breakpoints.tablet}) {
@@ -375,6 +372,8 @@ const ProductImageContainer = styled.div`
     margin-top: 5px;
     margin-bottom: -20px;
     overflow: hidden;
+    background: none;
+    filter: none;
   }
 `;
 
@@ -390,81 +389,42 @@ const ProductImageContainer = styled.div`
 const HeroImageContainer = styled.div`
   width: 100%;
   height: 100%;
-  background-image: url(${heroImage});
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
   transform: scale(2.7);
   position: relative;
-  filter: contrast(1.2) brightness(0.9);
-  mix-blend-mode: screen;
+  filter: contrast(1.15) brightness(0.9);
+  
+  @media (min-width: ${theme.breakpoints.mobile}) {
+    background-image: 
+      radial-gradient(ellipse at center, transparent 10%, rgba(26, 26, 26, 0.2) 25%, rgba(26, 26, 26, 0.5) 45%, rgba(26, 26, 26, 0.8) 65%, rgba(26, 26, 26, 0.95) 85%, rgba(26, 26, 26, 1) 100%),
+      linear-gradient(0deg, rgba(26, 26, 26, 0.9) 0%, rgba(26, 26, 26, 0.4) 15%, transparent 25%, transparent 75%, rgba(26, 26, 26, 0.4) 85%, rgba(26, 26, 26, 0.9) 100%),
+      linear-gradient(90deg, rgba(26, 26, 26, 0.8) 0%, rgba(26, 26, 26, 0.3) 20%, transparent 35%, transparent 65%, rgba(26, 26, 26, 0.3) 80%, rgba(26, 26, 26, 0.8) 100%),
+      linear-gradient(45deg, rgba(26, 26, 26, 0.6) 0%, transparent 25%, transparent 75%, rgba(26, 26, 26, 0.6) 100%),
+      linear-gradient(135deg, rgba(26, 26, 26, 0.5) 0%, transparent 30%, transparent 70%, rgba(26, 26, 26, 0.5) 100%),
+      url(${heroImage});
+    background-size: cover, cover, cover, cover, cover, contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-blend-mode: multiply, overlay, soft-light, color-burn, darken, normal;
+  }
   
   @media (max-width: ${theme.breakpoints.tablet}) {
     transform: scale(2.0);
   }
   
   @media (max-width: ${theme.breakpoints.mobile}) {
-    background-image: none;
-    transform: none;
-    display: none;
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 `;
 
 const MobileHeroImage = styled.img`
-  display: none;
-  
-  @media (max-width: ${theme.breakpoints.mobile}) {
-    display: block;
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    transform: scale(1.2);
-  }
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(ellipse at center, transparent 15%, rgba(26, 26, 26, 0.2) 25%, rgba(26, 26, 26, 0.5) 40%, rgba(26, 26, 26, 0.8) 60%, rgba(26, 26, 26, 0.95) 80%, rgba(26, 26, 26, 1) 100%);
-    pointer-events: none;
-    mix-blend-mode: multiply;
-    opacity: 1.2;
-    
-    @media (max-width: ${theme.breakpoints.mobile}) {
-      display: none;
-    }
-  }
-  
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-      linear-gradient(0deg, rgba(26, 26, 26, 0.9) 0%, rgba(26, 26, 26, 0.3) 20%, transparent 30%, transparent 70%, rgba(26, 26, 26, 0.3) 80%, rgba(26, 26, 26, 0.9) 100%),
-      linear-gradient(90deg, rgba(26, 26, 26, 0.8) 0%, rgba(26, 26, 26, 0.2) 25%, transparent 35%, transparent 65%, rgba(26, 26, 26, 0.2) 75%, rgba(26, 26, 26, 0.8) 100%),
-      linear-gradient(45deg, rgba(26, 26, 26, 0.7) 0%, transparent 30%, transparent 70%, rgba(26, 26, 26, 0.7) 100%),
-      linear-gradient(135deg, rgba(26, 26, 26, 0.6) 0%, transparent 35%, transparent 65%, rgba(26, 26, 26, 0.6) 100%),
-      radial-gradient(circle at 85% 15%, rgba(26, 26, 26, 0.6), transparent 45%),
-      radial-gradient(circle at 15% 85%, rgba(26, 26, 26, 0.6), transparent 45%),
-      radial-gradient(circle at 85% 85%, rgba(26, 26, 26, 0.5), transparent 40%),
-      radial-gradient(circle at 15% 15%, rgba(26, 26, 26, 0.5), transparent 40%),
-      conic-gradient(from 0deg at 50% 50%, rgba(26, 26, 26, 0.4) 0deg, transparent 50deg, rgba(26, 26, 26, 0.4) 110deg, transparent 170deg, rgba(26, 26, 26, 0.4) 230deg, transparent 290deg, rgba(26, 26, 26, 0.4) 360deg),
-      linear-gradient(to right, rgba(26, 26, 26, 1) 0%, rgba(26, 26, 26, 0.9) 3%, transparent 10%, transparent 90%, rgba(26, 26, 26, 0.9) 97%, rgba(26, 26, 26, 1) 100%),
-      linear-gradient(to bottom, rgba(26, 26, 26, 1) 0%, rgba(26, 26, 26, 0.9) 3%, transparent 10%, transparent 90%, rgba(26, 26, 26, 0.9) 97%, rgba(26, 26, 26, 1) 100%);
-    pointer-events: none;
-    mix-blend-mode: multiply;
-    opacity: 1.3;
-    
-    @media (max-width: ${theme.breakpoints.mobile}) {
-      display: none;
-    }
-  }
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  transform: scale(2.5);
 `;
 
 // Remove the img element since we're using background-image now
@@ -476,6 +436,18 @@ const HeroSectionNew = () => {
   const cardRef = useRef(null);
   const videoRef = useRef(null);
   const [showVideoModal, setShowVideoModal] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleNaphomeClick = () => {
     setShowVideoModal(true);
@@ -655,11 +627,14 @@ const HeroSectionNew = () => {
                 ease: [0.65, 0, 0.35, 1],
               }}
             >
-              <HeroImageContainer />
-              <MobileHeroImage 
-                src={heroImage}
-                alt="Naptick Hero"
-              />
+              {!isMobile ? (
+                <HeroImageContainer />
+              ) : (
+                <MobileHeroImage 
+                  src={heroImage}
+                  alt="Naptick Hero"
+                />
+              )}
             </ProductImageContainer>
           </HeroImage>
         </HeroContent>
