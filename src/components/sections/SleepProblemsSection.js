@@ -12,6 +12,10 @@ const SectionContainer = styled.section`
   width: 100%;
   height: 200vh; /* Reduced height since we're auto-scrolling after text sequence */
   background: #000;
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    margin-top: -100px;
+  }
 `;
 
 const PinnedSection = styled.div`
@@ -21,8 +25,22 @@ const PinnedSection = styled.div`
   background: #000;
   position: relative;
 
-  @media (max-width: ${theme.breakpoints.mobile}) {
-    overflow: visible;
+  @media (max-width: 480px) {
+    overflow: hidden; /* Keep overflow hidden to prevent horizontal scroll */
+  }
+`;
+
+// Video container for better control on mobile
+const VideoContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  
+  @media (max-width: 480px) {
+    overflow: visible; /* Allow video to extend beyond container on mobile */
   }
 `;
 
@@ -35,14 +53,25 @@ const VideoBackground = styled.video`
   height: 100%;
   object-fit: cover;
   opacity: 0.9; /* 70% transparency as requested */
-  transform: rotate(180deg);
+  transform: rotate(180deg); /* Keep rotation for large screens */
 
-  @media (max-width: ${theme.breakpoints.mobile}) {
+  /* Target common mobile screen sizes */
+  @media (max-width: 480px) {
+    width: 170%; /* Set video width back to 170% */
+    height: 100%;
+    left: -65%; /* Move video 65% to the left */
+    right: auto;
+    transform: rotate(180deg); /* Keep 180 degree rotation on mobile too */
     object-fit: cover;
-    width: 120%;
-    height: 120%;
-    left: -10%;
-    top: -10%;
+  }
+  
+  @media (max-width: 390px) {
+    width: 170%; /* Set video width back to 170% */
+    height: 100%;
+    left: -65%; /* Move video 65% to the left */
+    right: auto;
+    transform: rotate(180deg); /* Keep 180 degree rotation on mobile too */
+    object-fit: cover;
   }
 `;
 
@@ -389,17 +418,19 @@ const SleepProblemsSection = () => {
   return (
     <SectionContainer ref={sectionRef}>
       <PinnedSection ref={pinnedRef}>
-        <VideoBackground 
-          ref={videoRef} 
-          autoPlay
-          muted 
-          loop 
-          playsInline
-          preload="auto"
-        >
-          <source src="https://naptickvideos.s3.ap-south-1.amazonaws.com/Sleep-Problems.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </VideoBackground>
+        <VideoContainer>
+          <VideoBackground 
+            ref={videoRef} 
+            autoPlay
+            muted 
+            loop 
+            playsInline
+            preload="auto"
+          >
+            <source src="https://naptickvideos.s3.ap-south-1.amazonaws.com/Sleep-Problems.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </VideoBackground>
+        </VideoContainer>
 
         <OverlayGradient />
 
