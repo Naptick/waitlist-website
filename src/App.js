@@ -11,6 +11,7 @@ import TermsOfServicePage from './pages/TermsOfServicePage/TermsOfServicePage';
 import CookiePolicyPage from './pages/CookiePolicyPage/CookiePolicyPage';
 import SmoothScroll from './components/common/SmoothScroll';
 import ScrollToTop from './components/common/ScrollToTop';
+import { initializeTracking, trackPageView } from './utils/analytics';
 
 function AppContent() {
   const location = useLocation();
@@ -21,6 +22,16 @@ function AppContent() {
   // Check if we're on a page that should skip the video intro
   const skipVideoPages = ['/privacy', '/terms', '/cookies'];
   const shouldSkipVideo = skipVideoPages.includes(location.pathname);
+
+  // Initialize Google Analytics when app starts
+  useEffect(() => {
+    initializeTracking();
+  }, []);
+
+  // Track page changes
+  useEffect(() => {
+    trackPageView(location.pathname + location.search);
+  }, [location]);
 
   useEffect(() => {
     if (shouldSkipVideo) {

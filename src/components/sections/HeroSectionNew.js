@@ -12,6 +12,7 @@ import {
   triggerViralLoopsPopup,
   checkViralLoopsStatus,
 } from "../../utils/viralLoops";
+import { trackWaitlistSignup, trackCTAClick, trackVideo, trackSectionView } from "../../utils/analytics";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -458,10 +459,18 @@ const HeroSectionNew = () => {
   }, []);
 
   const handleNaphomeClick = () => {
+    // Track video modal opening
+    trackVideo.modalOpened('Hero Video');
+    trackCTAClick('Naphome in Action', 'Hero Section');
+    
     setShowVideoModal(true);
   };
 
   const handleCloseModal = () => {
+    // Track video modal closing
+    const watchTime = videoRef.current ? Math.round(videoRef.current.currentTime) : 0;
+    trackVideo.modalClosed('Hero Video', watchTime);
+    
     setShowVideoModal(false);
     if (videoRef.current) {
       videoRef.current.pause();
@@ -470,12 +479,19 @@ const HeroSectionNew = () => {
   };
 
   const handleJoinWaitlist = () => {
+    // Track waitlist signup start
+    trackWaitlistSignup.started();
+    trackCTAClick('Join the Waitlist', 'Hero Section');
+    
     triggerViralLoopsPopup();
   };
 
-  // Initialize Viral Loops widgets
+  // Initialize Viral Loops widgets and track section view
   useEffect(() => {
     checkViralLoopsStatus();
+    
+    // Track hero section view
+    trackSectionView('Hero');
   }, []);
 
   // Close modal on ESC key press
@@ -667,6 +683,12 @@ const HeroSectionNew = () => {
                 muted
                 loop
                 onClick={(e) => e.stopPropagation()}
+                onPlay={() => trackVideo.play('Hero Video')}
+                onPause={() => {
+                  const progress = videoRef.current ? Math.round((videoRef.current.currentTime / videoRef.current.duration) * 100) : 0;
+                  trackVideo.pause('Hero Video', progress);
+                }}
+                onEnded={() => trackVideo.complete('Hero Video')}
               >
                 <source
                   src="https://naptickvideos.s3.ap-south-1.amazonaws.com/Naptick-Full.mp4"

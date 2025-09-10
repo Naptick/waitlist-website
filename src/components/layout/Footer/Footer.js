@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { theme } from '../../../styles/theme';
 import linkedinIcon from '../../../assets/images/footer/linkedin.png';
 import instagramIcon from '../../../assets/images/footer/instagram.png';
+import { trackSocialClick } from '../../../utils/analytics';
 
 const FooterContainer = styled.footer`
   background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
@@ -301,6 +302,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => trackSocialClick('Twitter/X')}
               >
                 𝕏
               </SocialLink>
@@ -310,6 +312,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => trackSocialClick('Instagram')}
               >
                 <SocialIcon src={instagramIcon} alt="Instagram" />
               </SocialLink>
@@ -319,6 +322,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => trackSocialClick('LinkedIn')}
               >
                 <SocialIcon src={linkedinIcon} alt="LinkedIn" />
               </SocialLink>
