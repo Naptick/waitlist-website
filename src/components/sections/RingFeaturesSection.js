@@ -93,6 +93,18 @@ const CardContainer = styled.div`
   display: flex;
   align-items: center;
   overflow: hidden;
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    width: 100vw;
+    height: 360px;
+    justify-content: center;
+  }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    width: 100vw;
+    height: 340px;
+    justify-content: center;
+  }
 `;
 
 const CardWrapper = styled(motion.div)`
@@ -104,6 +116,16 @@ const CardWrapper = styled(motion.div)`
   align-items: center;
   justify-content: center;
   will-change: transform, opacity;
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    width: 260px;
+    height: 360px;
+  }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    width: 240px;
+    height: 340px;
+  }
 `;
 
 const FeatureCard = styled.div`
@@ -163,6 +185,19 @@ const CardDescription = styled.p`
 
 const RingFeaturesSection = () => {
   const containerRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
@@ -170,25 +205,27 @@ const RingFeaturesSection = () => {
 
   // Sequential card animation with proper timing for all 5 cards
   // Each card gets exactly 20% of the scroll range
+  // Use different spacing for mobile - increased for better gap
+  const cardSpacing = isMobile ? 380 : 350; // Increased spacing on mobile to prevent overlap
   
   // Card 1: Visible at start, slides out
-  const card1X = useTransform(scrollYProgress, [0, 0.2], [0, -350]);
+  const card1X = useTransform(scrollYProgress, [0, 0.2], [0, -cardSpacing]);
   const card1Opacity = useTransform(scrollYProgress, [0, 0.18, 0.2], [1, 1, 0]);
   
   // Card 2: Enters as partial, becomes full, exits
-  const card2X = useTransform(scrollYProgress, [0, 0.2, 0.4], [350, 0, -350]);
+  const card2X = useTransform(scrollYProgress, [0, 0.2, 0.4], [cardSpacing, 0, -cardSpacing]);
   const card2Opacity = useTransform(scrollYProgress, [0, 0.05, 0.2, 0.38, 0.4], [0, 0.7, 1, 1, 0]);
   
   // Card 3: Enters when card 2 is centered
-  const card3X = useTransform(scrollYProgress, [0.2, 0.4, 0.6], [350, 0, -350]);
+  const card3X = useTransform(scrollYProgress, [0.2, 0.4, 0.6], [cardSpacing, 0, -cardSpacing]);
   const card3Opacity = useTransform(scrollYProgress, [0.2, 0.25, 0.4, 0.58, 0.6], [0, 0.7, 1, 1, 0]);
   
   // Card 4: Enters when card 3 is centered
-  const card4X = useTransform(scrollYProgress, [0.4, 0.6, 0.8], [350, 0, -350]);
+  const card4X = useTransform(scrollYProgress, [0.4, 0.6, 0.8], [cardSpacing, 0, -cardSpacing]);
   const card4Opacity = useTransform(scrollYProgress, [0.4, 0.45, 0.6, 0.78, 0.8], [0, 0.7, 1, 1, 0]);
   
   // Card 5: Final card, stays visible
-  const card5X = useTransform(scrollYProgress, [0.6, 0.8, 1], [350, 0, 0]);
+  const card5X = useTransform(scrollYProgress, [0.6, 0.8, 1], [cardSpacing, 0, 0]);
   const card5Opacity = useTransform(scrollYProgress, [0.6, 0.65, 0.8, 1], [0, 0.7, 1, 1]);
 
   const cardData = [

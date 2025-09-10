@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { theme } from "../../styles/theme";
 // import SectionCard from "../common/SectionCard"; // Removed to use theme background
 import productHeroImage from "../../assets/images/product-hero3.png";
+import heroImage from "../../assets/images/hero.png";
 import heroBgImage from "../../assets/images/hero-bg.png";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -27,14 +28,6 @@ const HeroWrapper = styled.div`
     backface-visibility: hidden;
     transform3d: 0;
   }
-  
-  @media (max-width: ${theme.breakpoints.tablet}) {
-    padding-top: 80px;
-  }
-  
-  @media (max-width: ${theme.breakpoints.mobile}) {
-    padding-top: 70px;
-  }
 `;
 
 const HeroCard = styled.div`
@@ -42,10 +35,7 @@ const HeroCard = styled.div`
   overflow: hidden;
   padding: 60px 40px;
   border-radius: 24px;
-  background-image: url(${heroBgImage});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: black;
   filter: brightness(0.8) contrast(1.1);
   
   @media (max-width: ${theme.breakpoints.tablet}) {
@@ -54,7 +44,7 @@ const HeroCard = styled.div`
   }
   
   @media (max-width: ${theme.breakpoints.mobile}) {
-    padding: 40px 20px 20px 20px;
+    padding: 40px 20px 5px 20px;
     border-radius: 16px;
   }
 `;
@@ -70,6 +60,10 @@ const HeroContent = styled.div`
     text-align: center;
     gap: 40px;
   }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    gap: 15px;
+  }
 `;
 
 const HeroText = styled.div`
@@ -78,6 +72,17 @@ const HeroText = styled.div`
   align-items: flex-start;
   text-align: left;
   width: 100%;
+  margin-top: 160px;
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    margin-top: 100px;
+  }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    margin-top: 60px;
+    align-items: center;
+    text-align: center;
+  }
 `;
 
 const EarlyBirdBanner = styled(motion.div)`
@@ -123,11 +128,8 @@ const HeroTitle = styled(motion.h1)`
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 700;
   margin-bottom: 24px;
-  margin-top: 80px; // Space for the banner
   color: ${theme.colors.text};
   line-height: 1.2;
-  position: relative;
-  z-index: 2;
 
   .white-text {
     color: #ffffff !important;
@@ -142,12 +144,12 @@ const HeroTitle = styled(motion.h1)`
   }
   
   @media (max-width: ${theme.breakpoints.tablet}) {
-    margin-top: 70px;
+    margin-top: 0px; // No space
     font-size: clamp(2rem, 4vw, 3rem);
   }
   
   @media (max-width: ${theme.breakpoints.mobile}) {
-    margin-top: 60px;
+    margin-top: 0px; // No space
     font-size: clamp(1.8rem, 3.5vw, 2.5rem);
     margin-bottom: 20px;
   }
@@ -259,6 +261,14 @@ const EarlyAccessText = styled(motion.p)`
   margin-left: 8px;
   text-align: left;
   font-weight: 500;
+  margin-bottom: 0;
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    margin-top: 5px;
+    margin-bottom: 0;
+    text-align: center;
+    margin-left: 0;
+  }
 `;
 
 const VideoModal = styled(motion.div)`
@@ -332,30 +342,100 @@ const HeroImage = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    margin-top: -20px;
+    margin-bottom: -25px;
+  }
 `;
 
 const ProductImageContainer = styled.div`
   width: 100%;
-  height: 600px;
+  max-width: 380px;
+  height: 450px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: -20px;
+  overflow: visible;
+
+  @media (max-width: 1417px) {
+    margin-top: -40px;
+  }
 
   @media (max-width: ${theme.breakpoints.tablet}) {
-    height: 400px;
+    max-width: 350px;
+    height: 380px;
     margin-top: 20px;
+  }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    max-width: 280px;
+    height: 320px;
+    margin-top: 5px;
+    margin-bottom: -20px;
+    overflow: hidden;
+    background: none;
+    filter: none;
   }
 `;
 
-const ProductImage = styled.img`
+// const ProductImage = styled.img`
+//   width: 100%;
+//   height: auto;
+//   object-fit: contain;
+//   filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+//   border-radius: 20px;
+//   transform: scale(1.2);
+// `;
+
+const HeroImageContainer = styled.div`
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
-  border-radius: 20px;
+  transform: scale(2.8);
+  position: relative;
+  filter: contrast(1.15) brightness(0.9);
+  
+  @media (min-width: ${theme.breakpoints.mobile}) {
+    background-image: 
+      radial-gradient(ellipse at center, transparent 10%, rgba(26, 26, 26, 0.2) 25%, rgba(26, 26, 26, 0.5) 45%, rgba(26, 26, 26, 0.8) 65%, rgba(26, 26, 26, 0.95) 85%, rgba(26, 26, 26, 1) 100%),
+      linear-gradient(0deg, rgba(26, 26, 26, 0.9) 0%, rgba(26, 26, 26, 0.4) 15%, transparent 25%, transparent 75%, rgba(26, 26, 26, 0.4) 85%, rgba(26, 26, 26, 0.9) 100%),
+      linear-gradient(90deg, rgba(26, 26, 26, 0.8) 0%, rgba(26, 26, 26, 0.3) 20%, transparent 35%, transparent 65%, rgba(26, 26, 26, 0.3) 80%, rgba(26, 26, 26, 0.8) 100%),
+      linear-gradient(45deg, rgba(26, 26, 26, 0.6) 0%, transparent 25%, transparent 75%, rgba(26, 26, 26, 0.6) 100%),
+      linear-gradient(135deg, rgba(26, 26, 26, 0.5) 0%, transparent 30%, transparent 70%, rgba(26, 26, 26, 0.5) 100%),
+      url(${heroImage});
+    background-size: cover, cover, cover, cover, cover, contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-blend-mode: multiply, overlay, soft-light, color-burn, darken, normal;
+  }
+  
+  @media (max-width: 1417px) {
+    transform: scale(2.7);
+  }
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    transform: scale(2.0);
+  }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
 `;
+
+const MobileHeroImage = styled.img`
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  transform: scale(2.5);
+`;
+
+// Remove the img element since we're using background-image now
 
 // VideoBackground removed - using global theme background instead
 
@@ -364,6 +444,18 @@ const HeroSectionNew = () => {
   const cardRef = useRef(null);
   const videoRef = useRef(null);
   const [showVideoModal, setShowVideoModal] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleNaphomeClick = () => {
     setShowVideoModal(true);
@@ -543,10 +635,14 @@ const HeroSectionNew = () => {
                 ease: [0.65, 0, 0.35, 1],
               }}
             >
-              <ProductImage
-                src={productHeroImage}
-                alt="Naptick Smart Ring Product"
-              />
+              {!isMobile ? (
+                <HeroImageContainer />
+              ) : (
+                <MobileHeroImage 
+                  src={heroImage}
+                  alt="Naptick Hero"
+                />
+              )}
             </ProductImageContainer>
           </HeroImage>
         </HeroContent>

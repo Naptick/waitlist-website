@@ -12,6 +12,10 @@ const SectionContainer = styled.section`
   width: 100%;
   height: 200vh; /* Reduced height since we're auto-scrolling after text sequence */
   background: #000;
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    margin-top: -100px;
+  }
 `;
 
 const PinnedSection = styled.div`
@@ -21,8 +25,22 @@ const PinnedSection = styled.div`
   background: #000;
   position: relative;
 
-  @media (max-width: ${theme.breakpoints.mobile}) {
-    overflow: visible;
+  @media (max-width: 480px) {
+    overflow: hidden; /* Keep overflow hidden to prevent horizontal scroll */
+  }
+`;
+
+// Video container for better control on mobile
+const VideoContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  
+  @media (max-width: 480px) {
+    overflow: visible; /* Allow video to extend beyond container on mobile */
   }
 `;
 
@@ -35,14 +53,25 @@ const VideoBackground = styled.video`
   height: 100%;
   object-fit: cover;
   opacity: 0.9; /* 70% transparency as requested */
-  transform: rotate(180deg);
+  transform: rotate(180deg); /* Keep rotation for large screens */
 
-  @media (max-width: ${theme.breakpoints.mobile}) {
+  /* Target common mobile screen sizes */
+  @media (max-width: 480px) {
+    width: 170%; /* Set video width back to 170% */
+    height: 100%;
+    left: -65%; /* Move video 65% to the left */
+    right: auto;
+    transform: rotate(180deg); /* Keep 180 degree rotation on mobile too */
     object-fit: cover;
-    width: 120%;
-    height: 120%;
-    left: -10%;
-    top: -10%;
+  }
+  
+  @media (max-width: 390px) {
+    width: 170%; /* Set video width back to 170% */
+    height: 100%;
+    left: -65%; /* Move video 65% to the left */
+    right: auto;
+    transform: rotate(180deg); /* Keep 180 degree rotation on mobile too */
+    object-fit: cover;
   }
 `;
 
@@ -242,7 +271,7 @@ const SleepProblemsSection = () => {
       isAnimationRunning.current = true;
       console.log("🔄 Starting sleep problems animation sequence");
       
-      // 1. Show title first
+      // 1. Show title and first text together
       gsap.to(title, {
         opacity: 1,
         y: 0,
@@ -250,14 +279,33 @@ const SleepProblemsSection = () => {
         ease: "power2.out"
       });
 
-      // 2. Create looping text animation
-      let currentTextIndex = 0;
+      // Show first text immediately with title
+      gsap.to(textElements[0], {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power2.out",
+        delay: 0.3 // Small delay after title
+      });
+
+      // 2. Create looping text animation starting from second text
+      let currentTextIndex = 1; // Start from second text (index 1)
       let loopCount = 0;
       
       const showNextText = () => {
         if (!isAnimationRunning.current) {
           console.log("🛑 Animation stopped");
           return;
+        }
+        
+        // If we're showing the first text again in a loop, show title too
+        if (currentTextIndex === 0) {
+          gsap.to(title, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power2.out"
+          });
         }
         
         const textEl = textElements[currentTextIndex];
@@ -312,11 +360,25 @@ const SleepProblemsSection = () => {
         });
       };
 
-      // Start the looping sequence after title appears
-      const startTimeout = setTimeout(() => {
-        showNextText();
-      }, 1500); // Start 1.5 seconds after title
-      animationTimeouts.current.push(startTimeout);
+      // Fade out first text and start sequence with remaining texts
+      const fadeOutFirstText = setTimeout(() => {
+        gsap.to(textElements[0], {
+          opacity: 0,
+          y: -10,
+          duration: 0.6,
+          ease: "power2.in",
+          onComplete: () => {
+            // Start showing second text after first text fades out
+            if (isAnimationRunning.current) {
+              const nextTextTimeout = setTimeout(() => {
+                showNextText();
+              }, 1000);
+              animationTimeouts.current.push(nextTextTimeout);
+            }
+          }
+        });
+      }, 2500); // Let first text stay for 2.5 seconds with title
+      animationTimeouts.current.push(fadeOutFirstText);
     };
 
     // Create ScrollTrigger to pin the section
@@ -389,17 +451,19 @@ const SleepProblemsSection = () => {
   return (
     <SectionContainer ref={sectionRef}>
       <PinnedSection ref={pinnedRef}>
-        <VideoBackground 
-          ref={videoRef} 
-          autoPlay
-          muted 
-          loop 
-          playsInline
-          preload="auto"
-        >
-          <source src="https://naptickvideos.s3.ap-south-1.amazonaws.com/Sleep-Problems.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </VideoBackground>
+        <VideoContainer>
+          <VideoBackground 
+            ref={videoRef} 
+            autoPlay
+            muted 
+            loop 
+            playsInline
+            preload="auto"
+          >
+            <source src="https://naptickvideos.s3.ap-south-1.amazonaws.com/Sleep-Problems.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </VideoBackground>
+        </VideoContainer>
 
         <OverlayGradient />
 
