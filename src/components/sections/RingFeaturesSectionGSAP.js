@@ -180,11 +180,24 @@ const FeatureCard = styled.div`
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-  background: rgba(26, 26, 26, 0.3);
+  background: rgba(26, 26, 26, 0.9);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
   transition: transform 0.3s ease;
+  display: flex !important;
+  flex-direction: column !important;
+
+  /* Force consistent layout for all cards including card 2 */
+  & img {
+    height: 85% !important;
+  }
+  
+  & > div:last-child {
+    height: 15% !important;
+    position: relative !important;
+    background: black !important;
+  }
 
   &:hover {
     transform: scale(1.02);
@@ -200,6 +213,15 @@ const FeatureCard = styled.div`
     border-radius: 16px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
     
+    /* Specific styling for card 2 on mobile */
+    &:nth-child(2) img {
+      height: 75% !important;
+    }
+    
+    &:nth-child(2) > div:last-child {
+      height: 25% !important;
+    }
+    
     &:hover {
       transform: scale(1.01);
     }
@@ -207,66 +229,79 @@ const FeatureCard = styled.div`
 `;
 
 const CardImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 100% !important;
+  height: 85% !important;
+  object-fit: cover !important;
+  border-radius: 24px 24px 0 0;
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    border-radius: 20px 20px 0 0;
+  }
+  
+  @media (max-width: 430px) {
+    border-radius: 16px 16px 0 0;
+  }
 `;
 
 const CardContent = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 25px;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.6) 0%,
-    rgba(0, 0, 0, 0.3) 60%,
-    transparent 100%
-  );
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  height: 15% !important;
+  padding: 4px 16px 6px 16px !important;
+  background: black !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;
+  position: relative !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
   
   @media (max-width: ${theme.breakpoints.tablet}) {
-    padding: 20px;
+    padding: 3px 12px 5px 12px !important;
   }
   
   @media (max-width: ${theme.breakpoints.mobile}) {
-    padding: 15px;
+    padding: 2px 10px 4px 10px !important;
+  }
+  
+  @media (max-width: 430px) {
+    /* More padding for card 2 since it has 25% height */
+    .card-wrapper:nth-child(2) & {
+      padding: 6px 10px 8px 10px !important;
+    }
   }
 `;
 
 const CardTitle = styled.h3`
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: #fff;
   margin-bottom: 8px;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+  text-shadow: none;
   
   @media (max-width: ${theme.breakpoints.tablet}) {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+    margin-bottom: 6px;
   }
   
   @media (max-width: ${theme.breakpoints.mobile}) {
-    font-size: 1.1rem;
-    margin-bottom: 6px;
+    font-size: 1.0rem;
+    margin-bottom: 4px;
   }
 `;
 
 const CardDescription = styled.p`
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
   line-height: 1.4;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  text-shadow: none;
+  margin: 0;
   
   @media (max-width: ${theme.breakpoints.tablet}) {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
   
   @media (max-width: ${theme.breakpoints.mobile}) {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     line-height: 1.3;
   }
 `;
@@ -334,11 +369,11 @@ const RingFeaturesSectionGSAP = () => {
     const getCardPositions = () => {
       const screenWidth = window.innerWidth;
       if (screenWidth <= 430) { // Covers all mobile sizes including your 379px
-        // Mobile: Cards with increased spacing and moved further left
+        // Mobile: Cards with proper spacing to prevent overlap
         return { 
-          startX: -20, // Start 20px left of container edge (even further left)
-          partialOffset: 200, // Increased gap - 240px card + 40px gap = better separation
-          hiddenOffset: 340 // Hide cards off right edge
+          startX: 0, // Center the first card
+          partialOffset: 320, // 280px card + 40px gap = no overlap  
+          hiddenOffset: 400 // Hide cards off right edge
         };
       } else if (screenWidth <= 768) {
         // Tablet: Medium gaps

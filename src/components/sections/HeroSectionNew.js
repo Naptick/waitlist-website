@@ -351,24 +351,28 @@ const HeroImage = styled.div`
 
 const ProductImageContainer = styled.div`
   width: 100%;
-  max-width: 450px;
+  max-width: 380px;
   height: 450px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: -20px;
   overflow: visible;
+
+  @media (max-width: 1417px) {
+    margin-top: -40px;
+  }
 
   @media (max-width: ${theme.breakpoints.tablet}) {
     max-width: 350px;
-    height: 350px;
+    height: 380px;
     margin-top: 20px;
   }
   
   @media (max-width: ${theme.breakpoints.mobile}) {
     max-width: 280px;
-    height: 280px;
+    height: 320px;
     margin-top: 5px;
     margin-bottom: -20px;
     overflow: hidden;
@@ -389,7 +393,7 @@ const ProductImageContainer = styled.div`
 const HeroImageContainer = styled.div`
   width: 100%;
   height: 100%;
-  transform: scale(2.7);
+  transform: scale(2.8);
   position: relative;
   filter: contrast(1.15) brightness(0.9);
   
@@ -405,6 +409,10 @@ const HeroImageContainer = styled.div`
     background-repeat: no-repeat;
     background-position: center;
     background-blend-mode: multiply, overlay, soft-light, color-burn, darken, normal;
+  }
+  
+  @media (max-width: 1417px) {
+    transform: scale(2.7);
   }
   
   @media (max-width: ${theme.breakpoints.tablet}) {
