@@ -77,6 +77,16 @@ export const trackWaitlistSignup = {
   // When user successfully submits email
   completed: (email) => {
     trackEvent('waitlist_signup_completed', 'Conversion', 'Success', 1);
+    
+    // Track if this was a referred signup
+    const referralCode = sessionStorage.getItem('referralCode');
+    if (referralCode) {
+      trackEvent('referral_signup_completed', 'Conversion', 
+        `Referred by: ${referralCode}`, 1);
+      // Clear the referral code after tracking
+      sessionStorage.removeItem('referralCode');
+    }
+    
     // Also track as a conversion goal
     ReactGA.gtag('event', 'conversion', {
       'send_to': GA_MEASUREMENT_ID,
@@ -167,6 +177,30 @@ export const trackReferralSource = () => {
   const medium = urlParams.get('utm_medium');
   const campaign = urlParams.get('utm_campaign');
   
+  // Track Viral Loops referral parameters
+  const referralCode = urlParams.get('referralCode');
+  const refSource = urlParams.get('refSource');
+  
+  if (referralCode || refSource) {
+    // Track the viral loops referral
+    trackEvent('viral_loops_referral', 'Acquisition', 
+      `code:${referralCode || 'none'} | source:${refSource || 'none'}`
+    );
+    
+    // Track referral sharing method specifically
+    if (refSource) {
+      trackEvent('referral_share_method', 'Acquisition', refSource);
+    }
+    
+    // Track that this is a referred visitor
+    if (referralCode) {
+      trackEvent('referred_visitor', 'Acquisition', `Referred by: ${referralCode}`, 1);
+      
+      // Store referral code for later attribution when they sign up
+      sessionStorage.setItem('referralCode', referralCode);
+    }
+  }
+  
   // Track UTM parameters if they exist
   if (source || medium || campaign) {
     trackEvent('utm_tracking', 'Acquisition', 
@@ -193,7 +227,8 @@ export const trackReferralSource = () => {
     } else if (referrerDomain.includes('google.com')) {
       trackEvent('referral_source', 'Acquisition', 'Google Search');
     }
-  } else {
+  } else if (!referralCode && !refSource) {
+    // Only mark as direct if there's no referral code either
     trackEvent('referral_source', 'Acquisition', 'Direct');
   }
 };
