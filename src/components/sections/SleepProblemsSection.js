@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { theme } from "../../styles/theme";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { trackSectionView } from "../../utils/analytics";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -391,6 +392,8 @@ const SleepProblemsSection = () => {
       id: "sleep-problems-pin",
       onEnter: () => {
         console.log("🎯 Sleep problems section entered - starting animation");
+        // Track section view
+        trackSectionView('Sleep Problems');
         // Start the sequential animation when entering the section
         startSequentialAnimation();
         

@@ -7,6 +7,7 @@ import { theme } from "../../styles/theme";
 import AppSectionWrapper from "./AppSectionWrapper";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { trackCTAClick, trackSectionView } from "../../utils/analytics";
 
 // Import app images
 // import appBg from "../../assets/images/app-section/app-bg1.png";
@@ -211,6 +212,25 @@ const AppSection = ({ showKnowMore = false }) => {
   const phoneY = useTransform(scrollYProgress, [0, 1], [50, -50]);
   const phoneRotate = useTransform(scrollYProgress, [0, 0.5, 1], [0, 5, 0]);
 
+  // Track section view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          trackSectionView('App Section');
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   // Card-based reveal effect will be handled by SectionCard
 
   const containerVariants = {
@@ -272,6 +292,9 @@ const AppSection = ({ showKnowMore = false }) => {
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    trackCTAClick('App Store Download', 'App Section');
+                  }}
                 >
                   <img src={appStore} alt="Download on App Store" />
                 </StoreButton>

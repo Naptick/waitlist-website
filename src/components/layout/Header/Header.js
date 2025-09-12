@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { theme } from "../../../styles/theme";
 import logo from "../../../assets/images/brand-logo/logo1.png";
 import { triggerViralLoopsPopup } from "../../../utils/viralLoops";
+import { trackCTAClick, trackWaitlistSignup, trackSocialClick } from "../../../utils/analytics";
 
 const HeaderContainer = styled(motion.header)`
   position: fixed;
@@ -331,7 +332,11 @@ const Header = () => {
           <PreorderButton
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={triggerViralLoopsPopup}
+            onClick={() => {
+              trackWaitlistSignup.started();
+              trackCTAClick('Join the Waitlist', 'Header');
+              triggerViralLoopsPopup();
+            }}
           >
             Join the Waitlist
           </PreorderButton>
@@ -368,7 +373,11 @@ const Header = () => {
             <PreorderButton
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={triggerViralLoopsPopup}
+              onClick={() => {
+                trackWaitlistSignup.started();
+                trackCTAClick('Join the Waitlist', 'Header Mobile');
+                triggerViralLoopsPopup();
+              }}
               style={{ marginTop: "10px" }}
             >
               Join the Waitlist

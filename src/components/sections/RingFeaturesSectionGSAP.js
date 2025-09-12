@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { theme } from "../../styles/theme";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { trackSectionView } from "../../utils/analytics";
 
 // Import ring feature images
 import R1 from "../../assets/images/ring-features/R1.png";
@@ -46,7 +47,7 @@ const ContentGrid = styled.div`
     gap: 40px;
     padding: 0 20px;
   }
-  
+
   @media (max-width: ${theme.breakpoints.mobile}) {
     display: flex;
     flex-direction: column;
@@ -58,7 +59,7 @@ const ContentGrid = styled.div`
 
 const TextSection = styled.div`
   z-index: 2;
-  
+
   @media (max-width: ${theme.breakpoints.mobile}) {
     width: 100%;
     text-align: left;
@@ -82,7 +83,7 @@ const Title = styled(motion.h2)`
     background: none !important;
     -webkit-text-fill-color: #ffffff !important;
   }
-  
+
   @media (max-width: ${theme.breakpoints.mobile}) {
     font-size: 2rem;
     margin-bottom: 16px;
@@ -95,7 +96,7 @@ const Subtitle = styled(motion.p)`
   color: ${theme.colors.textSecondary};
   line-height: 1.6;
   margin-bottom: 40px;
-  
+
   @media (max-width: ${theme.breakpoints.mobile}) {
     font-size: 0.9rem;
     margin-bottom: 24px;
@@ -112,11 +113,11 @@ const CardsSection = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   @media (max-width: ${theme.breakpoints.tablet}) {
     height: 380px;
   }
-  
+
   @media (max-width: 430px) {
     height: 280px;
     width: 100%;
@@ -137,12 +138,12 @@ const CardContainer = styled.div`
   align-items: center;
   overflow: visible;
   perspective: 1000px;
-  
+
   @media (max-width: ${theme.breakpoints.tablet}) {
     width: 600px;
     height: 420px;
   }
-  
+
   @media (max-width: 430px) {
     width: 100%;
     height: 280px;
@@ -163,11 +164,11 @@ const CardWrapper = styled.div`
   justify-content: center;
   transform-origin: center center;
   will-change: transform, z-index;
-  
+
   @media (max-width: ${theme.breakpoints.tablet}) {
     height: 420px;
   }
-  
+
   @media (max-width: 430px) {
     height: 280px;
     justify-content: flex-start;
@@ -192,7 +193,7 @@ const FeatureCard = styled.div`
   & img {
     height: 85% !important;
   }
-  
+
   & > div:last-child {
     height: 15% !important;
     position: relative !important;
@@ -202,26 +203,26 @@ const FeatureCard = styled.div`
   &:hover {
     transform: scale(1.02);
   }
-  
+
   @media (max-width: ${theme.breakpoints.tablet}) {
     width: 320px;
     border-radius: 20px;
   }
-  
+
   @media (max-width: 430px) {
     width: 280px;
     border-radius: 16px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-    
+
     /* Specific styling for card 2 on mobile */
     &:nth-child(2) img {
       height: 75% !important;
     }
-    
+
     &:nth-child(2) > div:last-child {
       height: 25% !important;
     }
-    
+
     &:hover {
       transform: scale(1.01);
     }
@@ -233,11 +234,11 @@ const CardImage = styled.img`
   height: 85% !important;
   object-fit: cover !important;
   border-radius: 24px 24px 0 0;
-  
+
   @media (max-width: ${theme.breakpoints.tablet}) {
     border-radius: 20px 20px 0 0;
   }
-  
+
   @media (max-width: 430px) {
     border-radius: 16px 16px 0 0;
   }
@@ -254,15 +255,15 @@ const CardContent = styled.div`
   bottom: 0 !important;
   left: 0 !important;
   right: 0 !important;
-  
+
   @media (max-width: ${theme.breakpoints.tablet}) {
     padding: 3px 12px 5px 12px !important;
   }
-  
+
   @media (max-width: ${theme.breakpoints.mobile}) {
     padding: 2px 10px 4px 10px !important;
   }
-  
+
   @media (max-width: 430px) {
     /* More padding for card 2 since it has 25% height */
     .card-wrapper:nth-child(2) & {
@@ -277,14 +278,14 @@ const CardTitle = styled.h3`
   color: #fff;
   margin-bottom: 8px;
   text-shadow: none;
-  
+
   @media (max-width: ${theme.breakpoints.tablet}) {
     font-size: 1.2rem;
     margin-bottom: 6px;
   }
-  
+
   @media (max-width: ${theme.breakpoints.mobile}) {
-    font-size: 1.0rem;
+    font-size: 1rem;
     margin-bottom: 4px;
   }
 `;
@@ -295,11 +296,11 @@ const CardDescription = styled.p`
   line-height: 1.4;
   text-shadow: none;
   margin: 0;
-  
+
   @media (max-width: ${theme.breakpoints.tablet}) {
     font-size: 0.85rem;
   }
-  
+
   @media (max-width: ${theme.breakpoints.mobile}) {
     font-size: 0.8rem;
     line-height: 1.3;
@@ -323,7 +324,7 @@ const RingFeaturesSectionGSAP = () => {
     {
       image: R2,
       title: "Smart Environment Sensing",
-      description: "Temperature, Humidity,CO₂, VOCs, PM 2.5, Light",
+      description: "Temp, Humidity,CO₂, VOCs, PM 2.5, Light",
     },
     {
       image: R3,
@@ -368,26 +369,27 @@ const RingFeaturesSectionGSAP = () => {
     // Get responsive card positioning values
     const getCardPositions = () => {
       const screenWidth = window.innerWidth;
-      if (screenWidth <= 430) { // Covers all mobile sizes including your 379px
+      if (screenWidth <= 430) {
+        // Covers all mobile sizes including your 379px
         // Mobile: Cards with proper spacing to prevent overlap
-        return { 
+        return {
           startX: 0, // Center the first card
-          partialOffset: 320, // 280px card + 40px gap = no overlap  
-          hiddenOffset: 400 // Hide cards off right edge
+          partialOffset: 320, // 280px card + 40px gap = no overlap
+          hiddenOffset: 400, // Hide cards off right edge
         };
       } else if (screenWidth <= 768) {
         // Tablet: Medium gaps
-        return { 
+        return {
           startX: 0,
-          partialOffset: 350, 
-          hiddenOffset: 450 
+          partialOffset: 350,
+          hiddenOffset: 450,
         };
       } else {
         // Desktop: Original values
-        return { 
+        return {
           startX: 0,
-          partialOffset: 520, 
-          hiddenOffset: 720 
+          partialOffset: 520,
+          hiddenOffset: 720,
         };
       }
     };
@@ -434,7 +436,12 @@ const RingFeaturesSectionGSAP = () => {
       .fromTo(
         cards[2],
         { x: startX + hiddenOffset, opacity: 0, zIndex: 3 },
-        { x: startX + partialOffset, opacity: 1, duration: 1.2, ease: "power1.out" },
+        {
+          x: startX + partialOffset,
+          opacity: 1,
+          duration: 1.2,
+          ease: "power1.out",
+        },
         "-=0.8"
       );
 
@@ -448,7 +455,12 @@ const RingFeaturesSectionGSAP = () => {
       .fromTo(
         cards[3],
         { x: startX + hiddenOffset, opacity: 0, zIndex: 4 },
-        { x: startX + partialOffset, opacity: 1, duration: 1.2, ease: "power1.out" },
+        {
+          x: startX + partialOffset,
+          opacity: 1,
+          duration: 1.2,
+          ease: "power1.out",
+        },
         "-=0.8"
       );
 
@@ -462,7 +474,12 @@ const RingFeaturesSectionGSAP = () => {
       .fromTo(
         cards[4],
         { x: startX + hiddenOffset, opacity: 0, zIndex: 5 },
-        { x: startX + partialOffset, opacity: 1, duration: 1.2, ease: "power1.out" },
+        {
+          x: startX + partialOffset,
+          opacity: 1,
+          duration: 1.2,
+          ease: "power1.out",
+        },
         "-=0.8"
       );
 
@@ -476,14 +493,14 @@ const RingFeaturesSectionGSAP = () => {
     // REVERSE AUTO SEQUENCE - for scrolling backwards
     const startReverseAutoSequence = () => {
       console.log("🔄 Starting REVERSE card sequence...");
-      
+
       // Clear any existing timeouts
-      autoSequenceTimeouts.current.forEach(timeout => clearTimeout(timeout));
+      autoSequenceTimeouts.current.forEach((timeout) => clearTimeout(timeout));
       autoSequenceTimeouts.current = [];
-      
+
       // Start at the END with Card 5 visible
       gsap.set(tl, { progress: 1 });
-      
+
       console.log("✅ Ring section reverse state: Card 5 visible");
 
       // Schedule reverse card transitions
@@ -492,12 +509,14 @@ const RingFeaturesSectionGSAP = () => {
           // After Card 3, auto-scroll back to sleep-problems section
           const autoScrollTimeout = setTimeout(() => {
             if (!userScrollDetectedRef.current) {
-              console.log("🚀 Auto-scrolling back to sleep-problems section...");
+              console.log(
+                "🚀 Auto-scrolling back to sleep-problems section..."
+              );
               const sleepProblemsSection = section.previousElementSibling;
               if (sleepProblemsSection) {
-                sleepProblemsSection.scrollIntoView({ 
-                  behavior: 'smooth',
-                  block: 'start'
+                sleepProblemsSection.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
                 });
               }
             }
@@ -508,14 +527,16 @@ const RingFeaturesSectionGSAP = () => {
 
         // Calculate target progress for going backwards
         const targetProgress = (cardNum - 1) * 0.25; // 0.75 for card 4, 0.5 for card 3
-        
+
         // Wait time before transition (3 seconds display + 1 second gap)
         const waitTime = cardNum === 5 ? 3000 : 4000; // Card 5 only waits 3s, others wait 4s
-        
+
         const transitionTimeout = setTimeout(() => {
           if (!userScrollDetectedRef.current) {
-            console.log(`📱 Reverse transition: Card ${cardNum - 1} sliding back`);
-            
+            console.log(
+              `📱 Reverse transition: Card ${cardNum - 1} sliding back`
+            );
+
             // Animate backwards to show previous card
             gsap.to(tl, {
               progress: targetProgress,
@@ -524,14 +545,14 @@ const RingFeaturesSectionGSAP = () => {
               onComplete: () => {
                 // Schedule previous card
                 scheduleReverseCardTransition(cardNum - 1);
-              }
+              },
             });
           }
         }, waitTime);
-        
+
         autoSequenceTimeouts.current.push(transitionTimeout);
       };
-      
+
       // Start with Card 5 (going backwards to Card 4)
       scheduleReverseCardTransition(5);
     };
@@ -539,23 +560,25 @@ const RingFeaturesSectionGSAP = () => {
     // AUTO SEQUENCE FUNCTIONALITY - runs alongside scroll-triggered functionality
     const startAutoSequence = () => {
       console.log("🔄 Starting automatic card sequence...");
-      
+
       // Clear any existing timeouts
-      autoSequenceTimeouts.current.forEach(timeout => clearTimeout(timeout));
+      autoSequenceTimeouts.current.forEach((timeout) => clearTimeout(timeout));
       autoSequenceTimeouts.current = [];
-      
+
       // Start at the beginning with Card 1 + partial Card 2 visible
       gsap.set(tl, { progress: 0 });
-      
-      console.log("✅ Ring section initial state: Card 1 + partial Card 2 visible");
+
+      console.log(
+        "✅ Ring section initial state: Card 1 + partial Card 2 visible"
+      );
 
       // Card 1 stays for 3 seconds, then start transitions
       let currentProgress = 0;
-      
+
       // Calculate the timeline duration and sections
       const totalDuration = tl.duration();
       const progressPerTransition = 1 / 4; // 4 transitions (card 2, 3, 4, 5)
-      
+
       // Schedule Card transitions with exact timeline matching
       const scheduleCardTransition = (cardNum) => {
         if (cardNum > 5) {
@@ -572,14 +595,14 @@ const RingFeaturesSectionGSAP = () => {
 
         // Calculate target progress for this card
         const targetProgress = (cardNum - 1) * progressPerTransition;
-        
+
         // Wait time before transition (3 seconds display + 1 second gap)
         const waitTime = cardNum === 2 ? 3000 : 4000; // First card only waits 3s, others wait 4s (3s + 1s gap)
-        
+
         const transitionTimeout = setTimeout(() => {
           if (!userScrollDetectedRef.current) {
             console.log(`📱 Auto-transition: Card ${cardNum} sliding to front`);
-            
+
             // Animate to the exact timeline position for this card
             gsap.to(tl, {
               progress: targetProgress,
@@ -588,14 +611,14 @@ const RingFeaturesSectionGSAP = () => {
               onComplete: () => {
                 // Schedule next card
                 scheduleCardTransition(cardNum + 1);
-              }
+              },
             });
           }
         }, waitTime);
-        
+
         autoSequenceTimeouts.current.push(transitionTimeout);
       };
-      
+
       // Start with Card 2 (Card 1 is already visible)
       scheduleCardTransition(2);
     };
@@ -605,16 +628,16 @@ const RingFeaturesSectionGSAP = () => {
       console.log("🚀 Auto-scrolling to next section...");
       const nextSection = section.nextElementSibling;
       if (nextSection) {
-        nextSection.scrollIntoView({ 
-          behavior: 'smooth',
-          block: 'start'
+        nextSection.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
         });
       } else {
         // If no next section, scroll past this section
         const sectionBottom = section.offsetTop + section.offsetHeight;
         window.scrollTo({
           top: sectionBottom,
-          behavior: 'smooth'
+          behavior: "smooth",
         });
       }
     };
@@ -624,7 +647,7 @@ const RingFeaturesSectionGSAP = () => {
       userScrollDetectedRef.current = true;
       console.log("👆 User scroll detected - pausing auto sequence");
       // Clear all timeouts when user scrolls
-      autoSequenceTimeouts.current.forEach(timeout => clearTimeout(timeout));
+      autoSequenceTimeouts.current.forEach((timeout) => clearTimeout(timeout));
       autoSequenceTimeouts.current = [];
     };
 
@@ -636,38 +659,48 @@ const RingFeaturesSectionGSAP = () => {
       onEnter: () => {
         // Entering from above (scrolling down from sleep-problems)
         userScrollDetectedRef.current = false;
-        console.log("🎯 Section entered from ABOVE - starting FORWARD sequence");
+        console.log(
+          "🎯 Section entered from ABOVE - starting FORWARD sequence"
+        );
+        // Track section view
+        trackSectionView('Ring Features');
         startAutoSequence();
         // Listen for user scroll
-        window.addEventListener('wheel', handleScroll, { passive: true });
-        window.addEventListener('touchmove', handleScroll, { passive: true });
+        window.addEventListener("wheel", handleScroll, { passive: true });
+        window.addEventListener("touchmove", handleScroll, { passive: true });
       },
       onLeave: () => {
         // Leaving section (scrolling down to inside-naphome)
         console.log("🚪 Section left downwards - cleaning up");
         userScrollDetectedRef.current = true;
-        autoSequenceTimeouts.current.forEach(timeout => clearTimeout(timeout));
+        autoSequenceTimeouts.current.forEach((timeout) =>
+          clearTimeout(timeout)
+        );
         autoSequenceTimeouts.current = [];
-        window.removeEventListener('wheel', handleScroll);
-        window.removeEventListener('touchmove', handleScroll);
+        window.removeEventListener("wheel", handleScroll);
+        window.removeEventListener("touchmove", handleScroll);
       },
       onEnterBack: () => {
         // Entering from below (scrolling up from inside-naphome)
         userScrollDetectedRef.current = false;
-        console.log("🔄 Section entered from BELOW - starting REVERSE sequence");
+        console.log(
+          "🔄 Section entered from BELOW - starting REVERSE sequence"
+        );
         startReverseAutoSequence();
-        window.addEventListener('wheel', handleScroll, { passive: true });
-        window.addEventListener('touchmove', handleScroll, { passive: true });
+        window.addEventListener("wheel", handleScroll, { passive: true });
+        window.addEventListener("touchmove", handleScroll, { passive: true });
       },
       onLeaveBack: () => {
         // Leaving section (scrolling up to sleep-problems)
         console.log("🚪 Section left upwards - cleaning up");
         userScrollDetectedRef.current = true;
-        autoSequenceTimeouts.current.forEach(timeout => clearTimeout(timeout));
+        autoSequenceTimeouts.current.forEach((timeout) =>
+          clearTimeout(timeout)
+        );
         autoSequenceTimeouts.current = [];
-        window.removeEventListener('wheel', handleScroll);
-        window.removeEventListener('touchmove', handleScroll);
-      }
+        window.removeEventListener("wheel", handleScroll);
+        window.removeEventListener("touchmove", handleScroll);
+      },
     });
 
     // Store reference for cleanup
@@ -683,11 +716,11 @@ const RingFeaturesSectionGSAP = () => {
         autoSequenceRef.current.kill();
       }
       // Clear all auto sequence timeouts
-      autoSequenceTimeouts.current.forEach(timeout => clearTimeout(timeout));
+      autoSequenceTimeouts.current.forEach((timeout) => clearTimeout(timeout));
       autoSequenceTimeouts.current = [];
       // Clean up scroll event listeners
-      window.removeEventListener('wheel', handleScroll);
-      window.removeEventListener('touchmove', handleScroll);
+      window.removeEventListener("wheel", handleScroll);
+      window.removeEventListener("touchmove", handleScroll);
       // Clean up any ScrollTriggers created by this component
       ScrollTrigger.getAll().forEach((st) => {
         if (st.trigger === section) {

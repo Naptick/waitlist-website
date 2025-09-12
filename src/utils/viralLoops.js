@@ -1,17 +1,77 @@
 // Viral Loops utility functions
+import { trackWaitlistSignup } from './analytics';
 
 // Alternative manual popup function - creates a simple email input form as fallback
 export const showManualEmailPopup = () => {
   const email = prompt('Join our waitlist! Please enter your email:');
   if (email && email.includes('@')) {
+    // Track successful waitlist signup
+    trackWaitlistSignup.completed(email);
     alert(`Thanks! We'll notify you at ${email} when Naptick is ready.`);
     // Here you could send the email to your backend or a service like Mailchimp
     console.log('Manual email signup:', email);
+  } else if (email) {
+    // Track failed signup attempt
+    trackWaitlistSignup.failed('Invalid Email Format');
   }
+};
+
+// Listen for viral loops form submissions
+const setupViralLoopsListeners = () => {
+  // Listen for form submissions in viral loops popup
+  document.addEventListener('submit', (event) => {
+    // Check if this is a viral loops form
+    const form = event.target;
+    const isViralLoopsForm = form.closest('form-widget') || 
+                           form.classList.contains('vl-form') ||
+                           form.getAttribute('data-viral-loops');
+    
+    if (isViralLoopsForm) {
+      console.log('📧 Viral Loops form submitted');
+      
+      // Find email input
+      const emailInput = form.querySelector('input[type="email"]') || 
+                        form.querySelector('input[name*="email"]') ||
+                        form.querySelector('input[placeholder*="email"]');
+      
+      const email = emailInput ? emailInput.value : 'unknown@email.com';
+      
+      // Track successful signup
+      trackWaitlistSignup.completed(email);
+      console.log('✅ Waitlist signup tracked for:', email);
+    }
+  });
+
+  // Listen for referral modal "Join Now" clicks
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    const buttonText = target.textContent || target.innerText || '';
+    
+    // Check if this looks like a referral "Join Now" button
+    if (buttonText.toLowerCase().includes('join now') || 
+        buttonText.toLowerCase().includes('join') && target.closest('.referral-modal')) {
+      console.log('🔗 Referral Join Now clicked');
+      trackWaitlistSignup.referralJoinClicked();
+    }
+  });
+
+  // Listen for viral loops widget events (if they emit custom events)
+  window.addEventListener('viral-loops-submit', (event) => {
+    console.log('🎉 Viral Loops submission event detected');
+    if (event.detail && event.detail.email) {
+      trackWaitlistSignup.completed(event.detail.email);
+    }
+  });
 };
 
 export const triggerViralLoopsPopup = () => {
   console.log('🚀 Triggering Viral Loops popup...');
+  
+  // Setup listeners if not already done
+  if (!window.viralLoopsListenersSetup) {
+    setupViralLoopsListeners();
+    window.viralLoopsListenersSetup = true;
+  }
   
   // Wait for DOM to be ready
   if (document.readyState === 'loading') {
