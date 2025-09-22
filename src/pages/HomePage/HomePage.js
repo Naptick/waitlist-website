@@ -6,6 +6,7 @@ import SleepProblemsSection from '../../components/sections/SleepProblemsSection
 import RingFeaturesSectionGSAP from '../../components/sections/RingFeaturesSectionGSAP';
 import InsideNaphomeVideoSection from '../../components/sections/InsideNaphomeVideoSection';
 import AppSection1Only from '../../components/sections/AppSection1Only';
+import FAQSection from '../../components/sections/FAQSection';
 import Footer from '../../components/layout/Footer/Footer';
 
 const HomeContainer = styled.main`
@@ -28,6 +29,7 @@ const HomePage = () => {
       <RingFeaturesSectionGSAP />
       <InsideNaphomeVideoSection />
       <AppSection1Only />
+      <FAQSection />
       <Footer />
     </HomeContainer>
   );
